@@ -1,26 +1,114 @@
 @import "tailwindcss";
 
+@theme {
+  /* ── Dark performance palette ─────────────────────────────────────── */
+  --color-vp-bg:        #0C1520;
+  --color-vp-surface:   #14202E;
+  --color-vp-surface-2: #1C2D40;
+  --color-vp-border:    #253040;
+  --color-vp-text:      #E8EEF5;
+  --color-vp-muted:     #7B90A6;
+
+  /* Accent — vivid volleyball orange, used sparingly */
+  --color-orange: #FF5820;
+
+  /* Legacy alias kept for shared utilities */
+  --color-navy: #0C1520;
+
+  /* ── Typography ───────────────────────────────────────────────────── */
+  --font-display: var(--font-barlow);
+  --font-sans:    var(--font-inter);
+}
+
+/* ── Base ────────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-vp-bg:        #0C1520;
+  --color-vp-surface:   #14202E;
+  --color-vp-surface-2: #1C2D40;
+  --color-vp-border:    #253040;
+  --color-vp-text:      #E8EEF5;
+  --color-vp-muted:     #7B90A6;
+  --color-orange:       #FF5820;
+  --color-success:      #3DBD7A;
+  --color-error:        #E84040;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-vp-bg);
+  color: var(--color-vp-text);
+}
+
+/* ── Range input — athletic slider ──────────────────────────────────── */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  background: var(--color-vp-border);
+  border-radius: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-orange);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-orange);
+  cursor: pointer;
+  border: none;
+}
+
+/* ── Entrance animations ─────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+.animate-fade-up   { animation: fadeUp 0.45s ease both; }
+.animate-fade-up-1 { animation: fadeUp 0.45s ease 0.1s both; }
+.animate-fade-up-2 { animation: fadeUp 0.45s ease 0.2s both; }
+.animate-fade-up-3 { animation: fadeUp 0.45s ease 0.3s both; }
+
+/* Ensure elements are fully visible when animations are disabled — prevents
+   opacity:0 getting stuck (e.g. iOS Reduce Motion, low-power mode) */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-up-1,
+  .animate-fade-up-2,
+  .animate-fade-up-3 {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Touch interaction ───────────────────────────────────────────────── */
+button, [role="button"], a {
+  touch-action: manipulation;
+}
+
+/* ── Print ───────────────────────────────────────────────────────────── */
+@media print {
+  nav, footer, .no-print, button, .view-toggle { display: none !important; }
+  .print-view { display: block !important; }
+  body { background: white; color: black; font-size: 12pt; }
+  .drill-card { break-inside: avoid; page-break-inside: avoid; margin-bottom: 1.5rem; border: 1px solid #ccc; padding: 1rem; }
+  .drill-diagram svg { max-width: 180px; float: right; margin-left: 1rem; }
+  h1 { font-size: 18pt; }
+  h2 { font-size: 14pt; }
 }
