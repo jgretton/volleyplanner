@@ -30,21 +30,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${barlowCondensed.variable}`}>
       <head>
-        {/* DEV ONLY: catch JS errors before React mounts — remove before launch */}
-        <script dangerouslySetInnerHTML={{ __html: `
-          window.onerror = function(msg, src, line, col, err) {
-            var d = document.createElement('div');
-            d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#c00;color:#fff;font:12px monospace;padding:8px;z-index:9999;white-space:pre-wrap;max-height:40vh;overflow:auto';
-            d.textContent = 'JS ERROR: ' + msg + '\\n' + src + ':' + line;
-            document.body && document.body.appendChild(d);
-          };
-          window.onunhandledrejection = function(e) {
-            var d = document.createElement('div');
-            d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#900;color:#fff;font:12px monospace;padding:8px;z-index:9999;white-space:pre-wrap;max-height:40vh;overflow:auto';
-            d.textContent = 'UNHANDLED PROMISE: ' + (e.reason && (e.reason.message || e.reason));
-            document.body && document.body.appendChild(d);
-          };
-        `}} />
       </head>
       <body className="bg-vp-bg text-vp-text min-h-screen antialiased">
         <Navbar />
