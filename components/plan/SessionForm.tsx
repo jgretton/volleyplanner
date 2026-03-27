@@ -93,7 +93,7 @@ function Pill({
 // Shared dropdown panel
 function Popover({ children }: { children: React.ReactNode }) {
   return (
-    <div className="absolute bottom-full left-0 mb-2 bg-vp-surface-2 border border-vp-border rounded-lg p-1.5 flex flex-col gap-0.5 shadow-lg z-30 min-w-[110px]">
+    <div className="absolute bottom-full left-0 mb-2 bg-vp-surface-2 border border-vp-border rounded-lg p-1.5 flex flex-col gap-0.5 shadow-lg z-30 min-w-27.5">
       {children}
     </div>
   )
@@ -124,7 +124,7 @@ function PopoverItem({
   )
 }
 
-export function SessionForm() {
+export function SessionForm({ hideSubmit = false, formId = 'plan-form' }: { hideSubmit?: boolean; formId?: string }) {
   const router = useRouter()
   const [isLoading, setIsLoading]     = useState(false)
   const [descError, setDescError]     = useState(false)
@@ -175,7 +175,7 @@ export function SessionForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} id="plan-form" className="w-full">
+    <form onSubmit={handleSubmit} id={formId} className="w-full">
 
       {/* Click-away overlay */}
       {activePopover && (
@@ -191,7 +191,7 @@ export function SessionForm() {
 
           {/* Textarea */}
           <textarea
-            rows={4}
+            rows={6}
             value={description}
             onChange={e => { setDescription(e.target.value); setDescError(false) }}
             placeholder={'e.g. "12 players tonight, intermediate level. Working on serve receive - they keep shanking under pressure and we have a tournament on Saturday."'}
@@ -199,10 +199,10 @@ export function SessionForm() {
           />
 
           {/* ── Bottom toolbar ──────────────────────────────────────── */}
-          <div className="border-t border-vp-border px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="border-t border-vp-border px-4 py-3 flex items-center gap-3">
 
             {/* Controls row */}
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap flex-1">
 
               {/* Duration */}
               <div className="relative z-20">
@@ -269,20 +269,19 @@ export function SessionForm() {
 
             </div>
 
-            {/* Spacer (desktop only) */}
-            <div className="hidden sm:block flex-1" />
-
-            {/* Submit — full width on mobile, auto on desktop */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-orange text-white px-4 py-2.5 rounded-md text-sm font-semibold hover:bg-orange/90 transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading
-                ? <><Loader2 size={16} className="animate-spin" /> Generating...</>
-                : <><ArrowRight size={16} /> Generate plan</>
-              }
-            </button>
+            {/* Submit — hidden when parent renders its own button */}
+            {!hideSubmit && (
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="shrink-0 flex items-center justify-center gap-2 bg-orange text-white px-4 py-2.5 rounded-md text-sm font-semibold hover:bg-orange/90 transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading
+                  ? <><Loader2 size={16} className="animate-spin" /> Generating...</>
+                  : <><ArrowRight size={16} /> Generate plan</>
+                }
+              </button>
+            )}
 
           </div>
         </div>
