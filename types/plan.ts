@@ -64,3 +64,12 @@ export interface LikedDrill {
   drill_name: string
   drill_type: DiagramType
 }
+
+export interface SavedPlan {
+  id: string
+  title: string
+  input_data: SessionFormInputs
+  plan_data: SessionPlan
+  liked: boolean | null
+  created_at: string
+}

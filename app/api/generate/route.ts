@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Enforce free tier limit
-      if (!profile.is_pro && profile.plans_used_this_month >= 2) {
+      if (!profile.is_pro && profile.plans_used_this_month >= 3) {
         return NextResponse.json(
           {
             error: 'Monthly plan limit reached. Upgrade to Pro for unlimited plans.',
@@ -95,20 +95,13 @@ export async function POST(request: NextRequest) {
     if (inputs.userId) {
       const supabase = await createClient()
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('is_pro')
-        .eq('id', inputs.userId)
-        .single()
-
-      if (profile?.is_pro) {
-        await supabase.from('plans').insert({
-          user_id:    inputs.userId,
-          title:      plan.title,
-          input_data: inputs,
-          plan_data:  plan,
-        })
-      }
+      const { error: saveError } = await supabase.from('plans').insert({
+        user_id:    inputs.userId,
+        title:      plan.title,
+        input_data: inputs,
+        plan_data:  plan,
+      })
+      if (saveError) console.error('Plan save error:', saveError.message)
 
       await supabase.rpc('increment_plans_used', { user_id: inputs.userId })
     }

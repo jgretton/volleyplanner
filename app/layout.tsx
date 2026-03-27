@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Barlow_Condensed } from 'next/font/google'
+import { Toaster } from 'sonner'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import './globals.css'
@@ -35,6 +36,17 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
+        <Toaster
+          theme="dark"
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              background: 'var(--color-vp-surface-2)',
+              border: '1px solid var(--color-vp-border)',
+              color: 'var(--color-vp-text)',
+            },
+          }}
+        />
       </body>
     </html>
   )
