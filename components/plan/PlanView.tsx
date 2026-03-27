@@ -7,11 +7,13 @@ import type { SessionPlan } from '@/types/plan'
 interface PlanViewProps {
   plan: SessionPlan
   isPro?: boolean
+  planId?: string
+  drillFeedback?: Record<number, 'liked' | 'disliked'>
   onRegenerate?: (index: number) => void
   onSwap?: (index: number) => void
 }
 
-export function PlanView({ plan, isPro, onRegenerate, onSwap }: PlanViewProps) {
+export function PlanView({ plan, isPro, planId, drillFeedback, onRegenerate, onSwap }: PlanViewProps) {
   return (
     <div className="space-y-6">
 
@@ -39,6 +41,8 @@ export function PlanView({ plan, isPro, onRegenerate, onSwap }: PlanViewProps) {
           drill={drill}
           index={i}
           isPro={isPro}
+          planId={planId}
+          initialFeedback={drillFeedback?.[i] ?? null}
           onRegenerate={onRegenerate}
           onSwap={onSwap}
         />

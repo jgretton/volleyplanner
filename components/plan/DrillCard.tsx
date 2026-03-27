@@ -19,21 +19,46 @@ interface DrillCardProps {
   drill: Drill
   index: number
   isPro?: boolean
+  planId?: string
+  initialFeedback?: 'liked' | 'disliked' | null
   onRegenerate?: (index: number) => void
   onSwap?: (index: number) => void
 }
 
-export function DrillCard({ drill, index, isPro, onRegenerate, onSwap }: DrillCardProps) {
+export function DrillCard({ drill, index, isPro, planId, initialFeedback, onRegenerate, onSwap }: DrillCardProps) {
   const storageKey = `vp_drill_notes_${encodeURIComponent(drill.name)}`
   const [notes, setNotes] = useState(() => {
     if (typeof window === 'undefined') return ''
     return localStorage.getItem(storageKey) ?? ''
   })
-  const [feedback, setFeedback] = useState<'liked' | 'disliked' | null>(null)
+  const [feedback, setFeedback] = useState<'liked' | 'disliked' | null>(initialFeedback ?? null)
 
   function handleNotesChange(value: string) {
     setNotes(value)
     localStorage.setItem(storageKey, value)
+  }
+
+  async function handleFeedback(value: 'liked' | 'disliked') {
+    const next = feedback === value ? null : value
+    setFeedback(next)
+
+    if (!planId) return
+
+    try {
+      await fetch('/api/drill-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan_id: planId,
+          drill_index: index,
+          drill_name: drill.name,
+          drill_type: drill.phase,
+          feedback: next,
+        }),
+      })
+    } catch {
+      // Silently fail — UI state already updated
+    }
   }
 
   const borderColour  = phaseLeftBorder[drill.phase] ?? 'border-l-vp-border'
@@ -203,7 +228,7 @@ export function DrillCard({ drill, index, isPro, onRegenerate, onSwap }: DrillCa
             {isPro ? (
               <div className="flex gap-1 ml-auto">
                 <button
-                  onClick={() => setFeedback(f => f === 'liked' ? null : 'liked')}
+                  onClick={() => handleFeedback('liked')}
                   className={`px-3 py-1.5 rounded-md border transition-colors ${
                     feedback === 'liked'
                       ? 'bg-green-500/10 border-green-500/30 text-green-400'
@@ -214,7 +239,7 @@ export function DrillCard({ drill, index, isPro, onRegenerate, onSwap }: DrillCa
                   <ThumbsUp size={13} />
                 </button>
                 <button
-                  onClick={() => setFeedback(f => f === 'disliked' ? null : 'disliked')}
+                  onClick={() => handleFeedback('disliked')}
                   className={`px-3 py-1.5 rounded-md border transition-colors ${
                     feedback === 'disliked'
                       ? 'bg-red-500/10 border-red-500/30 text-red-400'
