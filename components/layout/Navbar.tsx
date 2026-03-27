@@ -1,92 +1,133 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
-import { LayoutDashboard, LogOut } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import { LayoutDashboard, CreditCard, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import type { User } from '@supabase/supabase-js'
 
-function UserMenu({ user }: { user: User }) {
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-  const initial = (user.email ?? '?')[0].toUpperCase()
+interface UserProfile {
+  is_pro: boolean
+}
 
-  // Close on outside click
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
+function UserMenu({ user, profile }: { user: User; profile: UserProfile | null }) {
+  const initial = (user.email ?? '?')[0].toUpperCase()
 
   async function handleSignOut() {
     const supabase = createClient()
     await supabase.auth.signOut()
-    setOpen(false)
+    window.location.href = '/'
   }
 
   return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen(o => !o)}
-        aria-label="Account menu"
-        className={cn(
-          'w-8 h-8 rounded-full border flex items-center justify-center text-xs font-semibold transition-colors duration-150',
-          open
-            ? 'bg-orange/10 border-orange text-orange'
-            : 'bg-vp-surface-2 border-vp-border text-vp-muted hover:border-orange/50 hover:text-vp-text'
-        )}
-      >
-        {initial}
-      </button>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild>
+        <button
+          aria-label="Account menu"
+          className={cn(
+            'w-8 h-8 rounded-full border flex items-center justify-center text-xs font-semibold transition-colors duration-150 outline-none',
+            'bg-vp-surface-2 border-vp-border text-vp-muted',
+            'hover:border-orange/50 hover:text-vp-text',
+            'data-[state=open]:bg-orange/10 data-[state=open]:border-orange data-[state=open]:text-orange'
+          )}
+        >
+          {initial}
+        </button>
+      </DropdownMenu.Trigger>
 
-      {open && (
-        <div className="absolute right-0 top-full mt-2 w-52 bg-vp-surface-2 border border-vp-border rounded-xl overflow-hidden z-50">
-          {/* Email */}
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          align="end"
+          sideOffset={8}
+          className="z-50 w-56 bg-vp-surface-2 border border-vp-border rounded-xl overflow-hidden shadow-xl animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+        >
+          {/* Identity */}
           <div className="px-4 py-3 border-b border-vp-border">
-            <p className="text-xs text-vp-muted truncate">{user.email}</p>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-vp-border flex items-center justify-center text-xs font-semibold text-vp-text shrink-0">
+                {initial}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-xs font-medium text-vp-text truncate">{user.email}</p>
+                </div>
+                {profile?.is_pro && (
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange/10 text-orange border border-orange/20 mt-1">
+                    Pro
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* Actions */}
-          <div className="p-1.5 flex flex-col gap-0.5">
-            <Link
-              href="/dashboard"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-vp-muted hover:bg-vp-border hover:text-vp-text transition-colors duration-150"
-            >
-              <LayoutDashboard size={14} />
-              My plans
-            </Link>
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-vp-muted hover:bg-vp-border hover:text-vp-text transition-colors duration-150 w-full text-left"
+          {/* Navigation */}
+          <div className="p-1.5 border-b border-vp-border">
+            <DropdownMenu.Item asChild>
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-vp-muted hover:bg-vp-border hover:text-vp-text transition-colors duration-150 outline-none cursor-pointer"
+              >
+                <LayoutDashboard size={14} />
+                My plans
+              </Link>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item asChild>
+              <Link
+                href="/dashboard/billing"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-vp-muted hover:bg-vp-border hover:text-vp-text transition-colors duration-150 outline-none cursor-pointer"
+              >
+                <CreditCard size={14} />
+                Billing
+              </Link>
+            </DropdownMenu.Item>
+          </div>
+
+          {/* Sign out */}
+          <div className="p-1.5">
+            <DropdownMenu.Item
+              onSelect={handleSignOut}
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-vp-muted hover:bg-red-500/10 hover:text-red-400 transition-colors duration-150 outline-none cursor-pointer"
             >
               <LogOut size={14} />
               Sign out
-            </button>
+            </DropdownMenu.Item>
           </div>
-        </div>
-      )}
-    </div>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   )
 }
 
 export function Navbar() {
   const [user, setUser] = useState<User | null>(null)
+  const [profile, setProfile] = useState<UserProfile | null>(null)
 
   useEffect(() => {
     const supabase = createClient()
 
+    async function loadUserAndProfile(userId: string) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('is_pro')
+        .eq('id', userId)
+        .single()
+      setProfile(data)
+    }
+
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user)
+      if (data.user) loadUserAndProfile(data.user.id)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
+      if (session?.user) {
+        loadUserAndProfile(session.user.id)
+      } else {
+        setProfile(null)
+      }
     })
 
     return () => subscription.unsubscribe()
@@ -97,50 +138,50 @@ export function Navbar() {
       <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
 
-          <Link href="/" className="flex items-center">
+          <Link href={user ? '/dashboard' : '/'} className="flex items-center">
             <span className="text-base font-semibold text-vp-text tracking-tight">
               Volley<span className="text-orange">Planner</span>
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="#how-it-works" className="text-sm text-vp-muted hover:text-vp-text transition-colors duration-150">
-              How it works
-            </Link>
-            <Link href="#pricing" className="text-sm text-vp-muted hover:text-vp-text transition-colors duration-150">
-              Pricing
-            </Link>
-            {user ? (
-              <UserMenu user={user} />
-            ) : (
-              <Link href="/signin" className="text-sm text-vp-muted hover:text-vp-text transition-colors duration-150">
-                Sign in
-              </Link>
-            )}
-            <Link
-              href="#plan-form"
-              className="bg-orange text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-orange/90 transition-all duration-150 active:scale-[0.98]"
-            >
-              Try free
-            </Link>
-          </div>
+          {user ? (
+            /* Authenticated — product nav only */
+            <UserMenu user={user} profile={profile} />
+          ) : (
+            /* Unauthenticated — marketing nav */
+            <>
+              <div className="hidden md:flex items-center gap-8">
+                <Link href="#how-it-works" className="text-sm text-vp-muted hover:text-vp-text transition-colors duration-150">
+                  How it works
+                </Link>
+                <Link href="#pricing" className="text-sm text-vp-muted hover:text-vp-text transition-colors duration-150">
+                  Pricing
+                </Link>
+                <Link href="/signin" className="text-sm text-vp-muted hover:text-vp-text transition-colors duration-150">
+                  Sign in
+                </Link>
+                <Link
+                  href="#plan-form"
+                  className="bg-orange text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-orange/90 transition-all duration-150 active:scale-[0.98]"
+                >
+                  Try free
+                </Link>
+              </div>
 
-          {/* Mobile */}
-          <div className="md:hidden flex items-center gap-3">
-            {user ? (
-              <UserMenu user={user} />
-            ) : (
-              <Link href="/signin" className="text-sm text-vp-muted hover:text-vp-text transition-colors duration-150">
-                Sign in
-              </Link>
-            )}
-            <Link
-              href="#plan-form"
-              className="bg-orange text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-orange/90 transition-colors"
-            >
-              Try free
-            </Link>
-          </div>
+              {/* Mobile — unauthenticated */}
+              <div className="md:hidden flex items-center gap-3">
+                <Link href="/signin" className="text-sm text-vp-muted hover:text-vp-text transition-colors duration-150">
+                  Sign in
+                </Link>
+                <Link
+                  href="#plan-form"
+                  className="bg-orange text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-orange/90 transition-colors"
+                >
+                  Try free
+                </Link>
+              </div>
+            </>
+          )}
 
         </div>
       </div>
