@@ -91,7 +91,7 @@ export default function SignInPage() {
               placeholder="you@example.com"
               required
               autoComplete="email"
-              className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-4 py-3 text-base sm:text-sm text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors"
+              className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-4 py-3 text-base text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors"
             />
           </div>
 

@@ -201,7 +201,7 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, onRege
               value={notes}
               onChange={e => handleNotesChange(e.target.value)}
               rows={2}
-              className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-3 py-2.5 text-sm text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors resize-none"
+              className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-3 py-2.5 text-base text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors resize-none"
               placeholder="Add your own notes for this drill..."
             />
           </div>

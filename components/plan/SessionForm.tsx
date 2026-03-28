@@ -195,7 +195,7 @@ export function SessionForm({ hideSubmit = false, formId = 'plan-form' }: { hide
             value={description}
             onChange={e => { setDescription(e.target.value); setDescError(false) }}
             placeholder={'e.g. "12 players tonight, intermediate level. Working on serve receive - they keep shanking under pressure and we have a tournament on Saturday."'}
-            className="w-full bg-transparent px-5 pt-5 pb-3 text-base sm:text-sm text-vp-text placeholder:text-vp-muted/35 focus:outline-none resize-none leading-relaxed"
+            className="w-full bg-transparent px-5 pt-5 pb-3 text-base text-vp-text placeholder:text-vp-muted/35 focus:outline-none resize-none leading-relaxed"
           />
 
           {/* ── Bottom toolbar ──────────────────────────────────────── */}

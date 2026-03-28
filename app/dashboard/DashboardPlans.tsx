@@ -248,7 +248,7 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   placeholder="Search plans…"
-                  className="w-full bg-vp-surface-2 border border-vp-border rounded-md pl-8 pr-8 py-2 text-xs text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors"
+                  className="w-full bg-vp-surface-2 border border-vp-border rounded-md pl-8 pr-8 py-2 text-base text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors"
                 />
                 {search && (
                   <button
