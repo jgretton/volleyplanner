@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { PlanView } from '@/components/plan/PlanView'
 import { CompactView } from '@/components/plan/CompactView'
 import { ViewToggle } from '@/components/plan/ViewToggle'
+import { SwapModal } from '@/components/plan/SwapModal'
 import { Printer } from 'lucide-react'
-import type { SessionPlan } from '@/types/plan'
+import type { SessionPlan, Drill } from '@/types/plan'
 
 const MOCK_PLAN: SessionPlan = {
   title: 'Intermediate Serve Receive Session',
@@ -190,13 +191,82 @@ export default function TestPlanPage() {
     if (typeof window === 'undefined') return 'full'
     return window.innerWidth < 768 ? 'session' : 'full'
   })
+  const [plan, setPlan] = useState<SessionPlan>(MOCK_PLAN)
+  const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null)
+  const [swapIndex, setSwapIndex]     = useState<number | null>(null)
+  const [swapOptions, setSwapOptions] = useState<Drill[] | null>(null)
+  const [swapLoading, setSwapLoading] = useState(false)
+  const [swapError, setSwapError]     = useState<string | null>(null)
+
+  const handleRegenerate = useCallback(async (index: number) => {
+    setRegeneratingIndex(index)
+    try {
+      const res = await fetch('/api/drill/regenerate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ drill_index: index, plan }),
+      })
+      const json = await res.json()
+      if (!res.ok) return
+      setPlan(prev => {
+        const drills = [...prev.drills]
+        drills[index] = json.data
+        return { ...prev, drills }
+      })
+    } catch {
+      // Silently fail
+    } finally {
+      setRegeneratingIndex(null)
+    }
+  }, [plan])
+
+  const handleSwapOpen = useCallback(async (index: number) => {
+    setSwapIndex(index)
+    setSwapOptions(null)
+    setSwapError(null)
+    setSwapLoading(true)
+    try {
+      const res = await fetch('/api/drill/swap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ drill_index: index, plan }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setSwapError(json.error ?? "Couldn't fetch alternatives. Please try again.")
+        return
+      }
+      setSwapOptions(json.data)
+    } catch {
+      setSwapError('Something went wrong. Please try again.')
+    } finally {
+      setSwapLoading(false)
+    }
+  }, [plan])
+
+  const handleSwapSelect = useCallback((drill: Drill) => {
+    if (swapIndex === null) return
+    setPlan(prev => {
+      const drills = [...prev.drills]
+      drills[swapIndex] = drill
+      return { ...prev, drills }
+    })
+    setSwapIndex(null)
+    setSwapOptions(null)
+  }, [swapIndex])
+
+  const handleSwapClose = useCallback(() => {
+    setSwapIndex(null)
+    setSwapOptions(null)
+    setSwapError(null)
+  }, [])
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
       {/* Dev banner */}
       <div className="bg-orange/10 border border-orange/20 rounded-xl px-5 py-3 mb-8 flex items-center justify-between gap-3">
-        <p className="text-sm text-orange font-medium">Test plan — mock data only</p>
+        <p className="text-sm text-orange font-medium">Test plan — mock data, Pro features enabled</p>
         <a href="/" className="text-xs text-orange/70 hover:text-orange transition-colors">
           Back to home
         </a>
@@ -215,9 +285,25 @@ export default function TestPlanPage() {
       </div>
 
       {view === 'full' ? (
-        <PlanView plan={MOCK_PLAN} />
+        <PlanView
+          plan={plan}
+          isPro={true}
+          regeneratingIndex={regeneratingIndex}
+          onRegenerate={handleRegenerate}
+          onSwap={handleSwapOpen}
+        />
       ) : (
-        <CompactView plan={MOCK_PLAN} />
+        <CompactView plan={plan} />
+      )}
+
+      {swapIndex !== null && (
+        <SwapModal
+          loading={swapLoading}
+          options={swapOptions}
+          error={swapError}
+          onSelect={handleSwapSelect}
+          onClose={handleSwapClose}
+        />
       )}
 
     </div>

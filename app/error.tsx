@@ -44,7 +44,7 @@ export default function Error({
         </h1>
         <p className="text-vp-muted text-base max-w-md mx-auto mb-10 leading-relaxed">
           An unexpected error occurred. It&apos;s been logged and we&apos;ll look into it.
-          Try again — it&apos;s usually a one-off.
+          Try again, it&apos;s usually a one-off.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <button
