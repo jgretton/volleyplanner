@@ -19,8 +19,62 @@ const barlowCondensed = Barlow_Condensed({
 })
 
 export const metadata: Metadata = {
-  title: 'VolleyPlanner — AI Volleyball Session Planner',
-  description: 'Generate complete volleyball training session plans in seconds. Court diagrams, drill instructions, and timing — all tailored to your squad.',
+  title: {
+    default: 'VolleyPlanner - AI Volleyball Session Planner',
+    template: '%s | VolleyPlanner',
+  },
+  description: 'Generate complete volleyball training session plans in seconds. Court diagrams, drill instructions, and timings tailored to your squad. Free for grassroots coaches in the UK.',
+  metadataBase: new URL('https://volleyplanner.co.uk'),
+  keywords: [
+    'volleyball session planner',
+    'volleyball coaching',
+    'volleyball drills',
+    'volleyball training plans',
+    'AI session planner',
+    'grassroots volleyball',
+    'Volleyball England',
+    'volleyball coach UK',
+    'volleyball session plans UK',
+    'volleyball training drills',
+  ],
+  authors: [{ name: 'VolleyPlanner' }],
+  creator: 'VolleyPlanner',
+  openGraph: {
+    type: 'website',
+    locale: 'en_GB',
+    url: 'https://volleyplanner.co.uk',
+    siteName: 'VolleyPlanner',
+    title: 'VolleyPlanner - AI Volleyball Session Planner',
+    description: 'Generate complete volleyball training session plans in seconds. Court diagrams, drill instructions, and timings tailored to your squad.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'VolleyPlanner - AI Volleyball Session Planner',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'VolleyPlanner - AI Volleyball Session Planner',
+    description: 'Generate complete volleyball training session plans in seconds. Free for grassroots coaches.',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://volleyplanner.co.uk',
+  },
 }
 
 export default function RootLayout({

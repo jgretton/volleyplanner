@@ -1,9 +1,15 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardPlans } from './DashboardPlans'
+import type { Metadata } from 'next'
 import type { SavedPlan } from '@/types/plan'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'My Plans',
+  robots: { index: false },
+}
 
 export interface LikedDrill {
   id: string

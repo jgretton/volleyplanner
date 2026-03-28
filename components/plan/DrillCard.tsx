@@ -211,64 +211,86 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
             )}
           </div>
 
-          {/* Actions */}
-          <div className="flex flex-wrap items-center gap-2 print:hidden">
-            {onRegenerate && (
+          {/* Feedback */}
+          {isPro ? (
+            <div className="flex items-center gap-2 print:hidden">
+              <span className="text-xs text-vp-muted/50 mr-1">Rate this drill</span>
               <button
-                onClick={() => !regenerating && onRegenerate(index)}
-                disabled={regenerating}
-                className="flex items-center gap-1.5 text-xs text-vp-muted hover:text-vp-text border border-vp-border px-3 py-1.5 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => handleFeedback('liked')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-xs transition-colors ${
+                  feedback === 'liked'
+                    ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                    : 'border-vp-border text-vp-muted hover:text-green-400 hover:border-green-500/30'
+                }`}
+                aria-label="Rate drill positively"
               >
-                {regenerating
-                  ? <><Loader2 size={11} className="animate-spin" /> Regenerating...</>
-                  : <><RefreshCw size={11} /> Regenerate</>
-                }
+                <ThumbsUp size={12} /> Liked it
               </button>
-            )}
-            {onSwap && (
               <button
-                onClick={() => !regenerating && onSwap(index)}
-                disabled={regenerating}
-                className="flex items-center gap-1.5 text-xs text-vp-muted hover:text-vp-text border border-vp-border px-3 py-1.5 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => handleFeedback('disliked')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-xs transition-colors ${
+                  feedback === 'disliked'
+                    ? 'bg-red-500/10 border-red-500/30 text-red-400'
+                    : 'border-vp-border text-vp-muted hover:text-red-400 hover:border-red-500/30'
+                }`}
+                aria-label="Rate drill negatively"
               >
-                <ArrowLeftRight size={11} /> Swap drill
+                <ThumbsDown size={12} /> Not for us
               </button>
-            )}
-
-            {isPro ? (
-              <div className="flex gap-1 ml-auto">
-                <button
-                  onClick={() => handleFeedback('liked')}
-                  className={`px-3 py-1.5 rounded-md border transition-colors ${
-                    feedback === 'liked'
-                      ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                      : 'border-vp-border text-vp-muted hover:text-green-400'
-                  }`}
-                  aria-label="Rate drill positively"
-                >
-                  <ThumbsUp size={13} />
-                </button>
-                <button
-                  onClick={() => handleFeedback('disliked')}
-                  className={`px-3 py-1.5 rounded-md border transition-colors ${
-                    feedback === 'disliked'
-                      ? 'bg-red-500/10 border-red-500/30 text-red-400'
-                      : 'border-vp-border text-vp-muted hover:text-red-400'
-                  }`}
-                  aria-label="Rate drill negatively"
-                >
-                  <ThumbsDown size={13} />
-                </button>
-              </div>
-            ) : (
-              <p className="text-xs text-vp-muted/50 ml-auto">
-                Rate drills on <span className="text-orange">Pro</span>
-              </p>
-            )}
-          </div>
+            </div>
+          ) : (
+            <p className="text-xs text-vp-muted/50 print:hidden">
+              Rate drills on <span className="text-orange">Pro</span>
+            </p>
+          )}
 
         </div>
       </div>
+
+      {/* ── Pro actions ────────────────────────────────────────────────── */}
+      {(onRegenerate || onSwap) && (
+        <div className="border-t border-vp-border grid grid-cols-2 divide-x divide-vp-border print:hidden">
+          {onRegenerate && (
+            <button
+              onClick={() => !regenerating && onRegenerate(index)}
+              disabled={regenerating}
+              className="flex items-start gap-3 px-5 py-4 hover:bg-vp-surface-2 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed group text-left"
+            >
+              <div className="w-7 h-7 rounded-md bg-vp-surface-2 group-hover:bg-vp-border border border-vp-border flex items-center justify-center shrink-0 mt-0.5 transition-colors">
+                {regenerating
+                  ? <Loader2 size={13} className="animate-spin text-orange" />
+                  : <RefreshCw size={13} className="text-vp-muted group-hover:text-vp-text transition-colors" />
+                }
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-vp-text leading-snug">
+                  {regenerating ? 'Regenerating…' : 'Regenerate drill'}
+                </p>
+                <p className="text-xs text-vp-muted mt-0.5 leading-relaxed">
+                  Replace this drill with a fresh alternative for the same phase and duration.
+                </p>
+              </div>
+            </button>
+          )}
+          {onSwap && (
+            <button
+              onClick={() => !regenerating && onSwap(index)}
+              disabled={regenerating}
+              className="flex items-start gap-3 px-5 py-4 hover:bg-vp-surface-2 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed group text-left"
+            >
+              <div className="w-7 h-7 rounded-md bg-vp-surface-2 group-hover:bg-vp-border border border-vp-border flex items-center justify-center shrink-0 mt-0.5 transition-colors">
+                <ArrowLeftRight size={13} className="text-vp-muted group-hover:text-vp-text transition-colors" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-vp-text leading-snug">Choose an alternative</p>
+                <p className="text-xs text-vp-muted mt-0.5 leading-relaxed">
+                  See 3 different drills and pick the one that best suits your squad.
+                </p>
+              </div>
+            </button>
+          )}
+        </div>
+      )}
     </Card>
   )
 }
