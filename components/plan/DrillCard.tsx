@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ThumbsUp, ThumbsDown, RefreshCw, ArrowLeftRight } from 'lucide-react'
+import { ThumbsUp, ThumbsDown, RefreshCw, ArrowLeftRight, Loader2 } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { DrillDiagram } from './DrillDiagram'
@@ -21,11 +21,12 @@ interface DrillCardProps {
   isPro?: boolean
   planId?: string
   initialFeedback?: 'liked' | 'disliked' | null
+  regenerating?: boolean
   onRegenerate?: (index: number) => void
   onSwap?: (index: number) => void
 }
 
-export function DrillCard({ drill, index, isPro, planId, initialFeedback, onRegenerate, onSwap }: DrillCardProps) {
+export function DrillCard({ drill, index, isPro, planId, initialFeedback, regenerating, onRegenerate, onSwap }: DrillCardProps) {
   const storageKey = `vp_drill_notes_${encodeURIComponent(drill.name)}`
   const [notes, setNotes] = useState(() => {
     if (typeof window === 'undefined') return ''
@@ -65,7 +66,7 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, onRege
   const hasDiagram    = drill.diagram_type !== 'none'
 
   return (
-    <Card className={`border-l-4 ${borderColour} overflow-hidden`}>
+    <Card className={`border-l-4 ${borderColour} overflow-hidden print-drill-card`}>
 
       {/* ── Full-width header ──────────────────────────────────────────── */}
       <div className="px-6 md:px-8 pt-6 md:pt-7 pb-5 border-b border-vp-border">
@@ -80,11 +81,11 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, onRege
       </div>
 
       {/* ── Body ──────────────────────────────────────────────────────── */}
-      <div className={hasDiagram ? 'flex flex-col md:flex-row' : ''}>
+      <div className={hasDiagram ? 'flex flex-col md:flex-row print-drill-body' : 'print-drill-body'}>
 
         {/* Left column — diagram + equipment (only when diagram present) */}
         {hasDiagram && (
-          <div className="md:w-64 shrink-0 p-6 md:p-8 border-b md:border-b-0 md:border-r border-vp-border flex flex-col gap-5">
+          <div className="md:w-64 shrink-0 p-6 md:p-8 border-b md:border-b-0 md:border-r border-vp-border flex flex-col gap-5 print-diagram-col">
 
             {/* Diagram */}
             <div className="relative rounded-lg overflow-hidden border border-vp-border group">
@@ -194,32 +195,41 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, onRege
 
           {/* Coach notes */}
           <div className="border-t border-vp-border pt-6">
-            <label className="text-xs font-medium uppercase tracking-widest text-vp-muted block mb-2.5">
+            <p className="text-xs font-medium uppercase tracking-widest text-vp-muted block mb-2.5">
               Your notes
-            </label>
-            <textarea
-              value={notes}
-              onChange={e => handleNotesChange(e.target.value)}
-              rows={2}
-              className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-3 py-2.5 text-base text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors resize-none"
-              placeholder="Add your own notes for this drill..."
-            />
+            </p>
+            {notes ? (
+              <p className="text-sm text-vp-text leading-relaxed">{notes}</p>
+            ) : (
+              <textarea
+                value={notes}
+                onChange={e => handleNotesChange(e.target.value)}
+                rows={2}
+                className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-3 py-2.5 text-base text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors resize-none print:hidden"
+                placeholder="Add your own notes for this drill..."
+              />
+            )}
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 print:hidden">
             {onRegenerate && (
               <button
-                onClick={() => onRegenerate(index)}
-                className="flex items-center gap-1.5 text-xs text-vp-muted hover:text-vp-text border border-vp-border px-3 py-1.5 rounded-md transition-colors"
+                onClick={() => !regenerating && onRegenerate(index)}
+                disabled={regenerating}
+                className="flex items-center gap-1.5 text-xs text-vp-muted hover:text-vp-text border border-vp-border px-3 py-1.5 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <RefreshCw size={11} /> Regenerate
+                {regenerating
+                  ? <><Loader2 size={11} className="animate-spin" /> Regenerating...</>
+                  : <><RefreshCw size={11} /> Regenerate</>
+                }
               </button>
             )}
             {onSwap && (
               <button
-                onClick={() => onSwap(index)}
-                className="flex items-center gap-1.5 text-xs text-vp-muted hover:text-vp-text border border-vp-border px-3 py-1.5 rounded-md transition-colors"
+                onClick={() => !regenerating && onSwap(index)}
+                disabled={regenerating}
+                className="flex items-center gap-1.5 text-xs text-vp-muted hover:text-vp-text border border-vp-border px-3 py-1.5 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ArrowLeftRight size={11} /> Swap drill
               </button>

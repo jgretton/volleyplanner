@@ -9,16 +9,17 @@ interface PlanViewProps {
   isPro?: boolean
   planId?: string
   drillFeedback?: Record<number, 'liked' | 'disliked'>
+  regeneratingIndex?: number | null
   onRegenerate?: (index: number) => void
   onSwap?: (index: number) => void
 }
 
-export function PlanView({ plan, isPro, planId, drillFeedback, onRegenerate, onSwap }: PlanViewProps) {
+export function PlanView({ plan, isPro, planId, drillFeedback, regeneratingIndex, onRegenerate, onSwap }: PlanViewProps) {
   return (
     <div className="space-y-6">
 
       {/* Overview */}
-      <Card className="p-6">
+      <Card className="p-6 print-overview">
         <h1 className="font-display font-bold uppercase tracking-tight text-vp-text text-3xl leading-tight mb-3">
           {plan.title}
         </h1>
@@ -31,7 +32,9 @@ export function PlanView({ plan, isPro, planId, drillFeedback, onRegenerate, onS
           <Badge>{plan.focus}</Badge>
         </div>
 
-        <TimelineBar timeline={plan.timeline} totalDuration={plan.total_duration} />
+        <div className="print-timeline">
+          <TimelineBar timeline={plan.timeline} totalDuration={plan.total_duration} />
+        </div>
       </Card>
 
       {/* Drills */}
@@ -43,6 +46,7 @@ export function PlanView({ plan, isPro, planId, drillFeedback, onRegenerate, onS
           isPro={isPro}
           planId={planId}
           initialFeedback={drillFeedback?.[i] ?? null}
+          regenerating={regeneratingIndex === i}
           onRegenerate={onRegenerate}
           onSwap={onSwap}
         />
@@ -50,7 +54,7 @@ export function PlanView({ plan, isPro, planId, drillFeedback, onRegenerate, onS
 
       {/* Session notes */}
       {plan.session_notes && (
-        <Card className="p-6 bg-vp-surface-2">
+        <Card className="p-6 bg-vp-surface-2 print-session-notes">
           <h2 className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-3">
             Session notes
           </h2>

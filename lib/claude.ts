@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { z } from 'zod'
-import type { SessionFormInputs, LikedDrill, SessionPlan } from '@/types/plan'
+import type { SessionFormInputs, LikedDrill, SessionPlan, Drill } from '@/types/plan'
 
 export const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -173,6 +173,90 @@ export function buildSwapDrillPrompt(
 Context: ${players} players, ${level} level, focus ${focus}, phase ${phase}, duration ${duration} minutes.
 
 Return a JSON array of exactly 3 drill objects matching the drill schema. JSON only, no markdown.`
+}
+
+// ── Single-drill functions ────────────────────────────────────────────────────
+
+export async function regenerateDrill(
+  plan: SessionPlan,
+  drillIndex: number,
+): Promise<Drill> {
+  const drill = plan.drills[drillIndex]
+  const otherNames = plan.drills.filter((_, i) => i !== drillIndex).map(d => d.name)
+  const prompt = buildRegenerateDrillPrompt(
+    drill.name,
+    drill.phase,
+    drill.duration,
+    plan.player_count,
+    plan.level,
+    plan.focus,
+    otherNames,
+  )
+
+  let response: string
+  try {
+    const message = await anthropic.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: prompt }],
+    })
+    const content = message.content[0]
+    if (content.type !== 'text') throw new Error('generation_failed')
+    response = content.text
+  } catch (err) {
+    console.error('Claude regenerate error:', err)
+    throw new Error('generation_failed')
+  }
+
+  try {
+    const cleaned = response.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim()
+    const result = DrillSchema.safeParse(JSON.parse(cleaned))
+    if (!result.success) throw new Error('generation_failed')
+    return result.data
+  } catch {
+    throw new Error('generation_failed')
+  }
+}
+
+export async function swapDrill(
+  plan: SessionPlan,
+  drillIndex: number,
+): Promise<Drill[]> {
+  const drill = plan.drills[drillIndex]
+  const prompt = buildSwapDrillPrompt(
+    drill.name,
+    drill.phase,
+    drill.duration,
+    plan.player_count,
+    plan.level,
+    plan.focus,
+  )
+
+  let response: string
+  try {
+    const message = await anthropic.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: prompt }],
+    })
+    const content = message.content[0]
+    if (content.type !== 'text') throw new Error('generation_failed')
+    response = content.text
+  } catch (err) {
+    console.error('Claude swap error:', err)
+    throw new Error('generation_failed')
+  }
+
+  try {
+    const cleaned = response.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim()
+    const result = z.array(DrillSchema).safeParse(JSON.parse(cleaned))
+    if (!result.success) throw new Error('generation_failed')
+    return result.data
+  } catch {
+    throw new Error('generation_failed')
+  }
 }
 
 // ── Main generation function ─────────────────────────────────────────────────

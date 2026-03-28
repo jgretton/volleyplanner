@@ -1,15 +1,16 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useState, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { PlanView } from '@/components/plan/PlanView'
 import { PlanSkeleton } from '@/components/plan/PlanSkeleton'
 import { CompactView } from '@/components/plan/CompactView'
 import { ViewToggle } from '@/components/plan/ViewToggle'
+import { SwapModal } from '@/components/plan/SwapModal'
 import { AlertTriangle, ClipboardX, Loader2, Printer } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import type { SessionPlan, SkillLevel } from '@/types/plan'
+import type { SessionPlan, SkillLevel, Drill } from '@/types/plan'
 
 function PlanPageContent() {
   const router        = useRouter()
@@ -18,10 +19,16 @@ function PlanPageContent() {
   const [error, setError]   = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthed, setIsAuthed]   = useState(false)
+  const [isPro, setIsPro]         = useState(false)
   const [view, setView] = useState<'full' | 'session'>(() => {
     if (typeof window === 'undefined') return 'full'
     return window.innerWidth < 768 ? 'session' : 'full'
   })
+  const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null)
+  const [swapIndex, setSwapIndex]   = useState<number | null>(null)
+  const [swapOptions, setSwapOptions] = useState<Drill[] | null>(null)
+  const [swapLoading, setSwapLoading] = useState(false)
+  const [swapError, setSwapError]     = useState<string | null>(null)
 
   useEffect(() => {
     // After magic link auth the callback redirects here with no params.
@@ -35,11 +42,6 @@ function PlanPageContent() {
       }
     }
 
-    // Check auth state to conditionally show the save banner
-    createClient().auth.getUser().then(({ data }) => {
-      setIsAuthed(!!data.user)
-    })
-
     async function generatePlan() {
       const players     = parseInt(searchParams.get('players')  ?? '10')
       const duration    = parseInt(searchParams.get('duration') ?? '90')
@@ -52,11 +54,24 @@ function PlanPageContent() {
         return
       }
 
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      setIsAuthed(!!user)
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_pro')
+          .eq('id', user.id)
+          .single()
+        setIsPro(profile?.is_pro ?? false)
+      }
+
       try {
         const response = await fetch('/api/generate', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ players, duration, level, description }),
+          body:    JSON.stringify({ players, duration, level, description, userId: user?.id }),
         })
 
         const json = await response.json()
@@ -80,6 +95,73 @@ function PlanPageContent() {
 
     generatePlan()
   }, [searchParams, router])
+
+  const handleRegenerate = useCallback(async (index: number) => {
+    if (!plan) return
+    setRegeneratingIndex(index)
+    try {
+      const res = await fetch('/api/drill/regenerate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ drill_index: index, plan }),
+      })
+      const json = await res.json()
+      if (!res.ok) return
+      setPlan(prev => {
+        if (!prev) return prev
+        const drills = [...prev.drills]
+        drills[index] = json.data
+        return { ...prev, drills }
+      })
+    } catch {
+      // Silently fail — user can retry
+    } finally {
+      setRegeneratingIndex(null)
+    }
+  }, [plan])
+
+  const handleSwapOpen = useCallback(async (index: number) => {
+    if (!plan) return
+    setSwapIndex(index)
+    setSwapOptions(null)
+    setSwapError(null)
+    setSwapLoading(true)
+    try {
+      const res = await fetch('/api/drill/swap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ drill_index: index, plan }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setSwapError(json.error ?? "Couldn't fetch alternatives. Please try again.")
+        return
+      }
+      setSwapOptions(json.data)
+    } catch {
+      setSwapError('Something went wrong. Please try again.')
+    } finally {
+      setSwapLoading(false)
+    }
+  }, [plan])
+
+  const handleSwapSelect = useCallback((drill: Drill) => {
+    if (swapIndex === null) return
+    setPlan(prev => {
+      if (!prev) return prev
+      const drills = [...prev.drills]
+      drills[swapIndex] = drill
+      return { ...prev, drills }
+    })
+    setSwapIndex(null)
+    setSwapOptions(null)
+  }, [swapIndex])
+
+  const handleSwapClose = useCallback(() => {
+    setSwapIndex(null)
+    setSwapOptions(null)
+    setSwapError(null)
+  }, [])
 
   if (isLoading) {
     return (
@@ -131,7 +213,7 @@ function PlanPageContent() {
 
       {/* Save prompt — soft nudge for unauthenticated users */}
       {!isAuthed && (
-        <div className="bg-vp-surface border border-vp-border rounded-xl px-5 py-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="print:hidden bg-vp-surface border border-vp-border rounded-xl px-5 py-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <p className="text-sm text-vp-muted">
             Sign in to save this plan and access it later. Free account - no password needed.
           </p>
@@ -150,7 +232,7 @@ function PlanPageContent() {
       )}
 
       {/* Controls */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="print:hidden flex items-center justify-between mb-6">
         <ViewToggle view={view} onChange={setView} />
         <button
           onClick={() => window.print()}
@@ -162,9 +244,25 @@ function PlanPageContent() {
       </div>
 
       {view === 'full' ? (
-        <PlanView plan={plan} />
+        <PlanView
+          plan={plan}
+          isPro={isPro}
+          regeneratingIndex={regeneratingIndex}
+          onRegenerate={isPro ? handleRegenerate : undefined}
+          onSwap={isPro ? handleSwapOpen : undefined}
+        />
       ) : (
         <CompactView plan={plan} />
+      )}
+
+      {swapIndex !== null && (
+        <SwapModal
+          loading={swapLoading}
+          options={swapOptions}
+          error={swapError}
+          onSelect={handleSwapSelect}
+          onClose={handleSwapClose}
+        />
       )}
 
     </div>
