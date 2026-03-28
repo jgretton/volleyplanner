@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="#0C1520"/>
+  <!-- V lettermark — orange, geometric, proportioned for legibility at 16px -->
+  <polygon points="5,7 11,7 16,22 21,7 27,7 16,27" fill="#FF5820"/>
+</svg>
