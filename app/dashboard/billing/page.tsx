@@ -1,8 +1,14 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { BillingClient } from './BillingClient'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Billing',
+  robots: { index: false },
+}
 
 export default async function BillingPage() {
   const supabase = await createClient()

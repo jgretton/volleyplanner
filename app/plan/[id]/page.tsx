@@ -1,7 +1,31 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { SavedPlanViewer } from './SavedPlanViewer'
 import type { SessionPlan } from '@/types/plan'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { robots: { index: false } }
+
+  const { data: plan } = await supabase
+    .from('plans')
+    .select('title')
+    .eq('id', id)
+    .eq('user_id', user.id)
+    .single()
+
+  return {
+    title: plan?.title ?? 'Session Plan',
+    robots: { index: false },
+  }
+}
 
 export default async function SavedPlanPage({
   params,

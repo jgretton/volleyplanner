@@ -77,6 +77,60 @@ const jsonLd = {
         'query-input': 'required name=search_term_string',
       },
     },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://volleyplanner.co.uk/#faq',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Do I need an account to use VolleyPlanner?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'You need a free account to generate plans. Sign-up takes seconds and uses a magic link - no password needed. Free accounts get 3 plans per month.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How long does it take to generate a session plan?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Most plans are ready in under a minute. The AI generates a complete structured session with 6-8 drills, court diagrams, coaching points, and timings.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I use it on my phone during training?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes - VolleyPlanner has a dedicated session view built for mobile. Tap any drill to see full instructions and the court diagram. It works once loaded, so no signal is needed in the sports hall.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is VolleyPlanner suitable for beginners and youth teams?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. When you describe your session, include the skill level of your players. The AI adapts the drills, language, and progressions to suit beginners, intermediates, or more advanced squads.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I regenerate or change individual drills?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Pro users can regenerate any drill with one click or choose from 3 alternatives. Free users can regenerate the whole plan if they have plans remaining that month.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What does VolleyPlanner Pro include?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Pro (£6/month) includes unlimited plans, saved plan history, regenerate or swap individual drills, coach notes per drill, PDF export, and the ability to share a plan via link.',
+          },
+        },
+      ],
+    },
   ],
 }
 
@@ -339,6 +393,55 @@ export default function HomePage() {
 
           <Testimonials />
 
+        </div>
+      </section>
+
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <section id="faq" className="border-b border-vp-border">
+        <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-28">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 lg:gap-20 items-start">
+
+            <div>
+              <h2 className="font-display font-bold uppercase tracking-tight text-vp-text leading-[0.95] text-[clamp(2.5rem,5vw,3.5rem)]">
+                Questions
+              </h2>
+            </div>
+
+            <dl className="space-y-8">
+              {[
+                {
+                  q: 'Do I need an account to get started?',
+                  a: 'You need a free account to generate plans. Sign-up takes seconds and uses a magic link, no password needed. Free accounts get 3 plans per month.',
+                },
+                {
+                  q: 'How long does it take to generate a plan?',
+                  a: 'Most plans are ready in under a minute. You get a complete structured session with 6-8 drills, court diagrams, coaching points, and timings.',
+                },
+                {
+                  q: 'Can I use it on my phone during training?',
+                  a: 'Yes. VolleyPlanner has a dedicated session view built for mobile. Tap any drill to see the full instructions and court diagram. It works once loaded, so no signal is needed in the sports hall.',
+                },
+                {
+                  q: 'Is it suitable for beginners and youth teams?',
+                  a: 'Yes. When you describe your session, include the skill level of your players. The AI adapts the drills, language, and progressions to suit beginners, intermediates, or more advanced squads.',
+                },
+                {
+                  q: 'Can I change individual drills?',
+                  a: 'Pro users can regenerate any drill with one click or choose from 3 alternatives. Free users can run the whole plan again if they have plans remaining that month.',
+                },
+                {
+                  q: 'What does Pro include?',
+                  a: 'Pro (£6/month) includes unlimited plans, saved plan history, regenerate or swap individual drills, coach notes per drill, PDF export, and the ability to share a plan via link.',
+                },
+              ].map(({ q, a }) => (
+                <div key={q} className="border-b border-vp-border pb-8 last:border-0 last:pb-0">
+                  <dt className="text-vp-text font-medium text-base mb-2">{q}</dt>
+                  <dd className="text-vp-muted text-sm leading-relaxed">{a}</dd>
+                </div>
+              ))}
+            </dl>
+
+          </div>
         </div>
       </section>
 

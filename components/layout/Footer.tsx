@@ -12,7 +12,7 @@ export function Footer() {
             </span>
             <p className="mt-3 text-sm text-vp-muted leading-relaxed max-w-xs">
               AI-powered session planning for volleyball coaches.
-              Free to try — no account needed.
+              Free to try, no card required.
             </p>
           </div>
 

@@ -1,4 +1,10 @@
+import type { Metadata } from 'next'
 import { SessionForm } from '@/components/plan/SessionForm'
+
+export const metadata: Metadata = {
+  title: 'New Session Plan',
+  robots: { index: false },
+}
 
 export default function NewPlanPage() {
   return (
