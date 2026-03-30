@@ -7,7 +7,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-12">
 
           <div>
-            <span className="text-base font-semibold text-vp-text tracking-tight">
+            <span className="font-display font-bold uppercase text-xl tracking-tight text-vp-text leading-none">
               Volley<span className="text-orange">Planner</span>
             </span>
             <p className="mt-3 text-sm text-vp-muted leading-relaxed max-w-xs">
@@ -21,7 +21,7 @@ export function Footer() {
             <div className="flex flex-col gap-3 text-sm">
               <Link href="#how-it-works" className="text-vp-muted hover:text-orange transition-colors duration-150">How it works</Link>
               <Link href="#pricing" className="text-vp-muted hover:text-orange transition-colors duration-150">Pricing</Link>
-              <Link href="/dashboard" className="text-vp-muted hover:text-orange transition-colors duration-150">Sign in</Link>
+              <Link href="/signin" className="text-vp-muted hover:text-orange transition-colors duration-150">Sign in</Link>
             </div>
           </div>
 

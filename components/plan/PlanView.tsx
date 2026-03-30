@@ -20,10 +20,10 @@ export function PlanView({ plan, isPro, planId, drillFeedback, regeneratingIndex
 
       {/* Overview */}
       <Card className="p-6 print-overview">
-        <h1 className="font-display font-bold uppercase tracking-tight text-vp-text text-3xl leading-tight mb-3">
+        <h1 className="font-display font-bold uppercase tracking-tight text-vp-text text-4xl leading-[0.95] mb-4">
           {plan.title}
         </h1>
-        <p className="text-vp-muted text-sm leading-relaxed mb-6">{plan.overview}</p>
+        <p className="text-vp-text/70 text-sm leading-relaxed mb-6">{plan.overview}</p>
 
         <div className="flex flex-wrap gap-2 mb-6">
           <Badge>{plan.player_count} players</Badge>

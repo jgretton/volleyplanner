@@ -5,6 +5,23 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { Mail, ArrowLeft } from 'lucide-react'
 
+function CourtLines() {
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full pointer-events-none select-none"
+      viewBox="0 0 1400 600"
+      fill="none"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+    >
+      <rect x="200" y="80" width="1000" height="440" stroke="white" strokeWidth="1" opacity="0.06" />
+      <line x1="700" y1="80" x2="700" y2="520" stroke="white" strokeWidth="1.5" opacity="0.08" />
+      <line x1="478" y1="80" x2="478" y2="520" stroke="white" strokeWidth="0.75" strokeDasharray="8 5" opacity="0.05" />
+      <line x1="922" y1="80" x2="922" y2="520" stroke="white" strokeWidth="0.75" strokeDasharray="8 5" opacity="0.05" />
+    </svg>
+  )
+}
+
 export default function SignInPage() {
   const [email, setEmail]       = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -31,8 +48,9 @@ export default function SignInPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center px-4">
-        <div className="max-w-sm w-full text-center">
+      <div className="relative min-h-[80vh] flex items-center justify-center px-4 overflow-hidden">
+        <CourtLines />
+        <div className="relative max-w-sm w-full text-center">
 
           <div className="w-14 h-14 rounded-full bg-orange/10 border border-orange/20 flex items-center justify-center mx-auto mb-6">
             <Mail size={24} className="text-orange" />
@@ -56,8 +74,9 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4">
-      <div className="max-w-sm w-full">
+    <div className="relative min-h-[80vh] flex items-center justify-center px-4 overflow-hidden">
+      <CourtLines />
+      <div className="relative max-w-sm w-full">
 
         <Link
           href="/"

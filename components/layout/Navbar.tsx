@@ -139,7 +139,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-14">
 
           <Link href={user ? '/dashboard' : '/'} className="flex items-center">
-            <span className="text-base font-semibold text-vp-text tracking-tight">
+            <span className="font-display font-bold uppercase text-xl tracking-tight text-vp-text leading-none">
               Volley<span className="text-orange">Planner</span>
             </span>
           </Link>

@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Card } from '@/components/ui/Card'
 import { DrillModal } from './DrillModal'
 import { TimelineBar } from './TimelineBar'
+import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { SessionPlan, Drill } from '@/types/plan'
 
@@ -60,7 +61,7 @@ export function CompactView({ plan }: CompactViewProps) {
               </div>
               <div className="flex items-center gap-3 ml-3 shrink-0">
                 <span className="text-sm text-vp-muted tabular-nums">{drill.duration} min</span>
-                <span className="text-vp-muted text-base leading-none">›</span>
+                <ChevronRight size={14} className="text-vp-muted" />
               </div>
             </button>
           )
