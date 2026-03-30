@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowUp, Loader2, ChevronDown, ArrowRight } from 'lucide-react'
+import { ArrowUp, Loader2, ChevronDown, ArrowRight, ArrowUpRight, Users, Clock, Signal } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import type { SessionFormInputs, SkillLevel } from '@/types/plan'
@@ -246,10 +246,11 @@ export function SessionForm({
                   type="button"
                   onClick={() => setActivePopover(p => p === 'players' ? null : 'players')}
                   className={cn(
-                    'flex items-center gap-0.5 text-xs font-medium pr-2 py-1.5 transition-colors duration-150 rounded-md',
+                    'flex items-center gap-1 text-xs font-medium pr-2 py-1.5 transition-colors duration-150 rounded-md',
                     activePopover === 'players' ? 'text-orange' : 'text-vp-muted hover:text-vp-text'
                   )}
                 >
+                  <Users size={11} className="shrink-0" />
                   {playersLabel}
                   <ChevronDown size={10} className="opacity-50 mt-px" />
                 </button>
@@ -265,7 +266,7 @@ export function SessionForm({
                         onChange={e => setCustomValue(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); confirmCustom() } if (e.key === 'Escape') closePopover() }}
                         placeholder="e.g. 24"
-                        className="w-20 bg-vp-border/50 border border-vp-border rounded-md px-2 py-1.5 text-xs text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
+                        className="w-20 bg-vp-border/50 border border-vp-border rounded-md px-2 py-1.5 text-[16px] leading-tight text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
                       />
                       <button
                         type="button"
@@ -300,10 +301,11 @@ export function SessionForm({
                   type="button"
                   onClick={() => setActivePopover(p => p === 'duration' ? null : 'duration')}
                   className={cn(
-                    'flex items-center gap-0.5 text-xs font-medium px-2 py-1.5 transition-colors duration-150 rounded-md',
+                    'flex items-center gap-1 text-xs font-medium px-2 py-1.5 transition-colors duration-150 rounded-md',
                     activePopover === 'duration' ? 'text-orange' : 'text-vp-muted hover:text-vp-text'
                   )}
                 >
+                  <Clock size={11} className="shrink-0" />
                   {durationLabel}
                   <ChevronDown size={10} className="opacity-50 mt-px" />
                 </button>
@@ -319,7 +321,7 @@ export function SessionForm({
                         onChange={e => setCustomValue(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); confirmCustom() } if (e.key === 'Escape') closePopover() }}
                         placeholder="e.g. 30"
-                        className="w-20 bg-vp-border/50 border border-vp-border rounded-md px-2 py-1.5 text-xs text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
+                        className="w-20 bg-vp-border/50 border border-vp-border rounded-md px-2 py-1.5 text-[16px] leading-tight text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
                       />
                       <button
                         type="button"
@@ -354,12 +356,13 @@ export function SessionForm({
                   type="button"
                   onClick={() => setActivePopover(p => p === 'level' ? null : 'level')}
                   className={cn(
-                    'flex items-center gap-0.5 text-xs font-medium pl-2 py-1.5 transition-colors duration-150 rounded-md',
+                    'flex items-center gap-1 text-xs font-medium pl-2 py-1.5 transition-colors duration-150 rounded-md',
                     activePopover === 'level'
                       ? 'text-orange'
                       : 'text-vp-muted hover:text-vp-text'
                   )}
                 >
+                  <Signal size={11} className="shrink-0" />
                   {levelLabel}
                   <ChevronDown size={10} className="opacity-50 mt-px" />
                 </button>
@@ -415,14 +418,14 @@ export function SessionForm({
             type="button"
             onClick={() => handleQuickStart(qs)}
             className={cn(
-              'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150',
+              'flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border transition-all duration-150',
               activeQuickStart === qs.label
                 ? 'border-orange/40 bg-orange/10 text-orange'
                 : 'border-vp-border text-vp-muted/60 hover:border-vp-muted hover:text-vp-text bg-transparent'
             )}
           >
             {qs.label}
-            <span className="opacity-70 text-xs leading-none">↗</span>
+            <ArrowUpRight size={13} className="opacity-70 shrink-0" />
           </button>
         ))}
       </div>

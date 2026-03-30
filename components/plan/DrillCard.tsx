@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ThumbsUp, ThumbsDown, RefreshCw, ArrowLeftRight, Loader2 } from 'lucide-react'
+import { ThumbsUp, ThumbsDown, RefreshCw, ArrowLeftRight, Loader2, Lock } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { DrillDiagram } from './DrillDiagram'
@@ -132,7 +132,7 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
               </>
             )}
 
-            {onRegenerate && (
+            {onRegenerate ? (
               <button
                 onClick={() => !regenerating && onRegenerate(index)}
                 disabled={regenerating}
@@ -145,9 +145,14 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
                   : <RefreshCw size={12} />
                 }
               </button>
-            )}
+            ) : !isPro && planId ? (
+              <div title="Pro feature — regenerate this drill" className="relative w-7 h-7 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
+                <RefreshCw size={12} />
+                <Lock size={7} className="absolute bottom-0.5 right-0.5 text-vp-muted/50" />
+              </div>
+            ) : null}
 
-            {onSwap && (
+            {onSwap ? (
               <button
                 onClick={() => !regenerating && onSwap(index)}
                 disabled={regenerating}
@@ -157,7 +162,12 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
               >
                 <ArrowLeftRight size={12} />
               </button>
-            )}
+            ) : !isPro && planId ? (
+              <div title="Pro feature — swap for an alternative drill" className="relative w-7 h-7 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
+                <ArrowLeftRight size={12} />
+                <Lock size={7} className="absolute bottom-0.5 right-0.5 text-vp-muted/50" />
+              </div>
+            ) : null}
           </div>
         </div>
 
@@ -294,7 +304,7 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
               value={notes}
               onChange={e => handleNotesChange(e.target.value)}
               rows={2}
-              className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-3 py-2.5 text-sm text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors resize-none print:hidden"
+              className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-3 py-2.5 text-[16px] leading-relaxed text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors resize-none print:hidden"
               placeholder="Add your own notes for this drill..."
             />
           </div>

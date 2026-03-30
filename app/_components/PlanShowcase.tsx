@@ -1,3 +1,4 @@
+import { ThumbsUp, ThumbsDown, RefreshCw, ArrowLeftRight, Lock } from 'lucide-react'
 import { ServeReceiveDiagram } from './ServeReceiveDiagram'
 
 const TIMELINE = [
@@ -56,11 +57,33 @@ export function PlanShowcase() {
       {/* Featured drill card */}
       <div className="border-l-4 border-l-blue-500">
 
-        {/* Drill header */}
-        <div className="px-6 sm:px-8 py-5 border-b border-vp-border">
-          <h4 className="text-base font-semibold text-vp-text mb-2.5">
-            Serve Receive Positioning Patterns
-          </h4>
+        {/* Drill header — matches DrillCard design */}
+        <div className="px-6 sm:px-8 pt-6 pb-5 border-b border-vp-border bg-blue-500/[0.06]">
+          <div className="flex items-start justify-between gap-3 mb-2.5">
+            <h4 className="font-display font-bold uppercase text-xl text-vp-text leading-tight tracking-tight">
+              Serve Receive Positioning Patterns
+            </h4>
+            {/* Pro action buttons — locked, but interactive on hover */}
+            <div className="flex items-center gap-1 shrink-0">
+              <button title="Rate drill — Pro feature" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/60 flex items-center justify-center hover:border-green-500/30 hover:text-green-400/50 hover:bg-green-500/5 transition-colors duration-150 cursor-not-allowed">
+                <ThumbsUp size={18} />
+                <Lock size={10} className="absolute bottom-1 right-1 text-vp-muted/70" />
+              </button>
+              <button title="Rate drill — Pro feature" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/60 flex items-center justify-center hover:border-red-500/30 hover:text-red-400/50 hover:bg-red-500/5 transition-colors duration-150 cursor-not-allowed">
+                <ThumbsDown size={18} />
+                <Lock size={10} className="absolute bottom-1 right-1 text-vp-muted/70" />
+              </button>
+              <div className="w-px h-5 bg-vp-border mx-0.5" />
+              <button title="Regenerate drill — Pro feature" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/60 flex items-center justify-center hover:border-vp-muted hover:text-vp-muted/70 hover:bg-vp-surface-2 transition-colors duration-150 cursor-not-allowed">
+                <RefreshCw size={18} />
+                <Lock size={10} className="absolute bottom-1 right-1 text-vp-muted/70" />
+              </button>
+              <button title="Swap for alternative drill — Pro feature" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/60 flex items-center justify-center hover:border-vp-muted hover:text-vp-muted/70 hover:bg-vp-surface-2 transition-colors duration-150 cursor-not-allowed">
+                <ArrowLeftRight size={18} />
+                <Lock size={10} className="absolute bottom-1 right-1 text-vp-muted/70" />
+              </button>
+            </div>
+          </div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
               Technical
@@ -130,7 +153,7 @@ export function PlanShowcase() {
             </div>
 
             <div className="border-t border-vp-border pt-5">
-              <div className="bg-vp-surface-2 border border-vp-border rounded-lg px-4 py-3">
+              <div className="bg-vp-surface-2 border border-vp-border border-l-4 border-l-blue-500 rounded-lg px-4 py-3">
                 <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-1">Progression</p>
                 <p className="text-sm text-vp-text leading-relaxed">
                   Add a second server to vary serve direction and speed. Introduce a block on the setter&apos;s side to increase decision-making pressure on the passer.
