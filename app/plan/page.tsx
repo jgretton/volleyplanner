@@ -10,6 +10,7 @@ import { ViewToggle } from '@/components/plan/ViewToggle'
 import { SwapModal } from '@/components/plan/SwapModal'
 import { AlertTriangle, ClipboardX, Loader2, Printer } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { ScrollToTop } from '@/components/ui/ScrollToTop'
 import type { SessionPlan, SkillLevel, Drill } from '@/types/plan'
 
 function PlanPageContent() {
@@ -264,6 +265,8 @@ function PlanPageContent() {
           onClose={handleSwapClose}
         />
       )}
+
+      <ScrollToTop />
 
     </div>
   )

@@ -6,6 +6,7 @@ import { CompactView } from '@/components/plan/CompactView'
 import { ViewToggle } from '@/components/plan/ViewToggle'
 import { SwapModal } from '@/components/plan/SwapModal'
 import { Printer } from 'lucide-react'
+import { ScrollToTop } from '@/components/ui/ScrollToTop'
 import type { SessionPlan, Drill } from '@/types/plan'
 
 const MOCK_PLAN: SessionPlan = {
@@ -305,6 +306,8 @@ export default function TestPlanPage() {
           onClose={handleSwapClose}
         />
       )}
+
+      <ScrollToTop />
 
     </div>
   )
