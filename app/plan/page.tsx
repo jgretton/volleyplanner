@@ -236,7 +236,7 @@ function PlanPageContent() {
         <ViewToggle view={view} onChange={setView} />
         <button
           onClick={() => window.print()}
-          className="flex items-center gap-1.5 text-sm text-vp-muted hover:text-vp-text border border-vp-border px-3 py-1.5 rounded-md transition-colors duration-150"
+          className="flex items-center gap-1.5 text-sm text-vp-muted hover:text-vp-text border border-vp-border px-3 py-2.5 rounded-md transition-colors duration-150"
         >
           <Printer size={13} />
           Print

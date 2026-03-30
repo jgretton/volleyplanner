@@ -78,7 +78,7 @@ export function BillingClient({ email, profile }: BillingClientProps) {
       <div className="mb-10">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-1.5 text-xs text-vp-muted hover:text-vp-text transition-colors duration-150 mb-6"
+          className="inline-flex items-center gap-1.5 text-xs text-vp-muted hover:text-vp-text transition-colors duration-150 py-2 mb-4"
         >
           <ArrowLeft size={12} />
           Back to dashboard

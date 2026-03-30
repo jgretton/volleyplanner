@@ -104,27 +104,27 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
                   onClick={() => handleFeedback('liked')}
                   title="Liked it"
                   className={cn(
-                    'w-7 h-7 rounded-md border flex items-center justify-center transition-colors duration-150',
+                    'w-11 h-11 rounded-md border flex items-center justify-center transition-colors duration-150',
                     feedback === 'liked'
                       ? 'bg-green-500/10 border-green-500/30 text-green-400'
                       : 'border-vp-border text-vp-muted hover:text-green-400 hover:border-green-500/30'
                   )}
                   aria-label="Rate drill positively"
                 >
-                  <ThumbsUp size={12} />
+                  <ThumbsUp size={15} />
                 </button>
                 <button
                   onClick={() => handleFeedback('disliked')}
                   title="Not for us"
                   className={cn(
-                    'w-7 h-7 rounded-md border flex items-center justify-center transition-colors duration-150',
+                    'w-11 h-11 rounded-md border flex items-center justify-center transition-colors duration-150',
                     feedback === 'disliked'
                       ? 'bg-red-500/10 border-red-500/30 text-red-400'
                       : 'border-vp-border text-vp-muted hover:text-red-400 hover:border-red-500/30'
                   )}
                   aria-label="Rate drill negatively"
                 >
-                  <ThumbsDown size={12} />
+                  <ThumbsDown size={15} />
                 </button>
                 {(onRegenerate || onSwap) && (
                   <div className="w-px h-4 bg-vp-border mx-0.5" />
@@ -137,17 +137,17 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
                 onClick={() => !regenerating && onRegenerate(index)}
                 disabled={regenerating}
                 title="Regenerate drill"
-                className="w-7 h-7 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
+                className="w-11 h-11 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
                 aria-label="Regenerate drill"
               >
                 {regenerating
                   ? <Loader2 size={12} className="animate-spin text-orange" />
-                  : <RefreshCw size={12} />
+                  : <RefreshCw size={15} />
                 }
               </button>
             ) : !isPro && planId ? (
-              <div title="Pro feature — regenerate this drill" className="relative w-7 h-7 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
-                <RefreshCw size={12} />
+              <div title="Pro feature — regenerate this drill" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
+                <RefreshCw size={15} />
                 <Lock size={7} className="absolute bottom-0.5 right-0.5 text-vp-muted/50" />
               </div>
             ) : null}
@@ -157,14 +157,14 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
                 onClick={() => !regenerating && onSwap(index)}
                 disabled={regenerating}
                 title="Choose an alternative drill"
-                className="w-7 h-7 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
+                className="w-11 h-11 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
                 aria-label="Choose an alternative drill"
               >
-                <ArrowLeftRight size={12} />
+                <ArrowLeftRight size={15} />
               </button>
             ) : !isPro && planId ? (
-              <div title="Pro feature — swap for an alternative drill" className="relative w-7 h-7 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
-                <ArrowLeftRight size={12} />
+              <div title="Pro feature — swap for an alternative drill" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
+                <ArrowLeftRight size={15} />
                 <Lock size={7} className="absolute bottom-0.5 right-0.5 text-vp-muted/50" />
               </div>
             ) : null}

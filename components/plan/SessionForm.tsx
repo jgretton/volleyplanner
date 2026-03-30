@@ -271,7 +271,7 @@ export function SessionForm({
                       <button
                         type="button"
                         onClick={confirmCustom}
-                        className="w-6 h-6 rounded-md bg-orange/10 text-orange hover:bg-orange hover:text-white flex items-center justify-center transition-colors shrink-0"
+                        className="w-9 h-9 rounded-md bg-orange/10 text-orange hover:bg-orange hover:text-white flex items-center justify-center transition-colors shrink-0"
                       >
                         <ArrowRight size={11} />
                       </button>
@@ -326,7 +326,7 @@ export function SessionForm({
                       <button
                         type="button"
                         onClick={confirmCustom}
-                        className="w-6 h-6 rounded-md bg-orange/10 text-orange hover:bg-orange hover:text-white flex items-center justify-center transition-colors shrink-0"
+                        className="w-9 h-9 rounded-md bg-orange/10 text-orange hover:bg-orange hover:text-white flex items-center justify-center transition-colors shrink-0"
                       >
                         <ArrowRight size={11} />
                       </button>
@@ -386,7 +386,7 @@ export function SessionForm({
                 disabled={isLoading}
                 aria-label="Generate plan"
                 className={cn(
-                  'shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-150',
+                  'shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-150',
                   'bg-orange text-white hover:bg-orange/90 active:scale-95',
                   'disabled:opacity-40 disabled:cursor-not-allowed',
                   !description.trim() && 'opacity-40'

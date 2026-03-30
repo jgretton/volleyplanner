@@ -80,7 +80,7 @@ export default function SignInPage() {
 
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-vp-muted hover:text-vp-text transition-colors duration-150 mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-vp-muted hover:text-vp-text transition-colors duration-150 py-2 mb-6"
         >
           <ArrowLeft size={14} />
           Back

@@ -239,9 +239,9 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
                 {search && (
                   <button
                     onClick={() => setSearch('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-vp-muted/50 hover:text-vp-muted transition-colors"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-vp-muted/50 hover:text-vp-muted transition-colors rounded-md"
                   >
-                    <X size={11} />
+                    <X size={13} />
                   </button>
                 )}
               </div>
@@ -253,8 +253,8 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
                     onClick={() => setFilter(f)}
                     className={
                       filter === f
-                        ? 'px-3 py-1 rounded-md text-xs font-medium bg-vp-border text-vp-text transition-colors'
-                        : 'px-3 py-1 rounded-md text-xs font-medium text-vp-muted hover:text-vp-text transition-colors'
+                        ? 'px-3 py-2 rounded-md text-xs font-medium bg-vp-border text-vp-text transition-colors'
+                        : 'px-3 py-2 rounded-md text-xs font-medium text-vp-muted hover:text-vp-text transition-colors'
                     }
                   >
                     {f === 'all' ? 'All' : '♥ Liked'}

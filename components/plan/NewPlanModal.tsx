@@ -28,7 +28,7 @@ function ModalInner({ onClose, hideSubmit = false }: { onClose: () => void; hide
         <button
           onClick={onClose}
           aria-label="Close"
-          className="p-1.5 rounded-md text-vp-muted hover:text-vp-text hover:bg-vp-surface-2 transition-colors duration-150"
+          className="w-11 h-11 flex items-center justify-center rounded-md text-vp-muted hover:text-vp-text hover:bg-vp-surface-2 transition-colors duration-150"
         >
           <X size={18} />
         </button>

@@ -97,14 +97,14 @@ export function SavedPlanViewer({ plan: initialPlan, planId, isPro, drillFeedbac
       <div className="print:hidden flex items-center justify-between mb-6">
         <Link
           href="/dashboard"
-          className="flex items-center gap-1.5 text-sm text-vp-muted hover:text-vp-text transition-colors duration-150"
+          className="flex items-center gap-1.5 text-sm text-vp-muted hover:text-vp-text transition-colors duration-150 py-2.5"
         >
           <ArrowLeft size={14} />
           My plans
         </Link>
         <button
           onClick={() => window.print()}
-          className="flex items-center gap-1.5 text-sm text-vp-muted hover:text-vp-text border border-vp-border px-3 py-1.5 rounded-md transition-colors duration-150"
+          className="flex items-center gap-1.5 text-sm text-vp-muted hover:text-vp-text border border-vp-border px-3 py-2.5 rounded-md transition-colors duration-150"
         >
           <Printer size={13} />
           Print

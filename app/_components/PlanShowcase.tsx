@@ -59,7 +59,7 @@ export function PlanShowcase() {
 
         {/* Drill header — matches DrillCard design */}
         <div className="px-6 sm:px-8 pt-6 pb-5 border-b border-vp-border bg-blue-500/[0.06]">
-          <div className="flex items-start justify-between gap-3 mb-2.5">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-2.5">
             <h4 className="font-display font-bold uppercase text-xl text-vp-text leading-tight tracking-tight">
               Serve Receive Positioning Patterns
             </h4>

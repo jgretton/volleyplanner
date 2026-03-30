@@ -13,7 +13,7 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
       <button
         onClick={() => onChange('full')}
         className={cn(
-          'px-4 py-1.5 rounded text-sm font-medium transition-all duration-150',
+          'px-4 py-2.5 rounded text-sm font-medium transition-all duration-150',
           view === 'full'
             ? 'bg-vp-bg text-vp-text border border-vp-border'
             : 'text-vp-muted hover:text-vp-text'
@@ -24,7 +24,7 @@ export function ViewToggle({ view, onChange }: ViewToggleProps) {
       <button
         onClick={() => onChange('session')}
         className={cn(
-          'px-4 py-1.5 rounded text-sm font-medium transition-all duration-150',
+          'px-4 py-2.5 rounded text-sm font-medium transition-all duration-150',
           view === 'session'
             ? 'bg-vp-bg text-vp-text border border-vp-border'
             : 'text-vp-muted hover:text-vp-text'

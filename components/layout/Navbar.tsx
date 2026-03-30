@@ -27,7 +27,7 @@ function UserMenu({ user, profile }: { user: User; profile: UserProfile | null }
         <button
           aria-label="Account menu"
           className={cn(
-            'w-8 h-8 rounded-full border flex items-center justify-center text-xs font-semibold transition-colors duration-150 outline-none',
+            'w-11 h-11 rounded-full border flex items-center justify-center text-xs font-semibold transition-colors duration-150 outline-none',
             'bg-vp-surface-2 border-vp-border text-vp-muted',
             'hover:border-orange/50 hover:text-vp-text',
             'data-[state=open]:bg-orange/10 data-[state=open]:border-orange data-[state=open]:text-orange'

@@ -56,17 +56,17 @@ export function PlanCard({ plan, onDelete, onToggleLiked, deleting }: PlanCardPr
               <button
                 onClick={e => { e.preventDefault(); onToggleLiked(id, !liked) }}
                 aria-label={liked ? 'Unlike plan' : 'Like plan'}
-                className="p-1.5 rounded-md transition-colors duration-150 text-vp-muted/50 hover:text-orange"
+                className="w-11 h-11 flex items-center justify-center rounded-md transition-colors duration-150 text-vp-muted/50 hover:text-orange"
               >
-                <Heart size={13} className={cn(liked && 'fill-orange text-orange')} />
+                <Heart size={15} className={cn(liked && 'fill-orange text-orange')} />
               </button>
 
               <button
                 onClick={e => { e.preventDefault(); onDelete(id) }}
                 aria-label="Delete plan"
-                className="p-1.5 rounded-md text-vp-muted/50 hover:text-red-400 hover:bg-red-400/10 transition-colors duration-150"
+                className="w-11 h-11 flex items-center justify-center rounded-md text-vp-muted/50 hover:text-red-400 hover:bg-red-400/10 transition-colors duration-150"
               >
-                <Trash2 size={13} />
+                <Trash2 size={15} />
               </button>
             </div>
           </div>

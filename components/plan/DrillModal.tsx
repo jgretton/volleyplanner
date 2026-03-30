@@ -60,7 +60,7 @@ export function DrillModal({ drill, onClose }: DrillModalProps) {
           <button
             onClick={onClose}
             aria-label="Close"
-            className="text-vp-muted hover:text-vp-text transition-colors ml-4 mt-0.5"
+            className="w-11 h-11 flex items-center justify-center shrink-0 rounded-md text-vp-muted hover:text-vp-text hover:bg-vp-surface-2 transition-colors duration-150 ml-2"
           >
             <X size={18} />
           </button>

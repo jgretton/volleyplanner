@@ -32,7 +32,7 @@ export function SwapModal({ loading, options, error, onSelect, onClose }: SwapMo
           </div>
           <button
             onClick={onClose}
-            className="text-vp-muted hover:text-vp-text transition-colors p-1"
+            className="w-11 h-11 flex items-center justify-center rounded-md text-vp-muted hover:text-vp-text hover:bg-vp-surface-2 transition-colors duration-150"
             aria-label="Close"
           >
             <X size={16} />
