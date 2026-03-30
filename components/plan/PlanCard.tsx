@@ -76,11 +76,6 @@ export function PlanCard({ plan, onDelete, onToggleLiked, deleting }: PlanCardPr
             {title}
           </h3>
 
-          {/* Focus */}
-          {input_data.focus && (
-            <p className="text-xs text-vp-muted/80 leading-snug">{input_data.focus}</p>
-          )}
-
           {/* Meta */}
           <p className="text-xs text-vp-muted/50">
             {input_data.duration} min · {input_data.players} players
