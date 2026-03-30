@@ -7,8 +7,8 @@ import { BentoGrid } from './_components/BentoGrid'
 import { Testimonials } from './_components/Testimonials'
 
 export const metadata: Metadata = {
-  title: 'VolleyPlanner - AI Volleyball Session Planner for Grassroots Coaches',
-  description: 'Plan your next volleyball training session in under a minute. AI-generated session plans with court diagrams, drill instructions, and timings. Built for UK grassroots coaches.',
+  title: 'VolleyPlanner — AI Volleyball Session Planner',
+  description: 'Plan your next volleyball training session in under a minute. Describe your squad, your focus, and how long you have — VolleyPlanner generates a complete session plan with court diagrams, drills, and timings.',
   alternates: {
     canonical: 'https://volleyplanner.co.uk',
   },
@@ -22,7 +22,7 @@ const jsonLd = {
       '@id': 'https://volleyplanner.co.uk/#app',
       name: 'VolleyPlanner',
       url: 'https://volleyplanner.co.uk',
-      description: 'AI-powered volleyball training session planner for grassroots coaches. Generates complete session plans with court diagrams, drill instructions, and timings.',
+      description: 'AI-powered volleyball session planner for coaches. Generates complete session plans with court diagrams, drill instructions, and timings.',
       applicationCategory: 'SportsApplication',
       operatingSystem: 'Web',
       offers: [
@@ -45,7 +45,7 @@ const jsonLd = {
       featureList: [
         'AI-generated volleyball session plans',
         'Court diagrams for every drill',
-        'Volleyball England terminology',
+        'Volleyball-specific terminology',
         'Mobile-optimised session view',
         'Print-ready layout',
         'Regenerate individual drills',
@@ -53,10 +53,6 @@ const jsonLd = {
       audience: {
         '@type': 'Audience',
         audienceType: 'Volleyball coaches',
-        geographicArea: {
-          '@type': 'Country',
-          name: 'United Kingdom',
-        },
       },
     },
     {
@@ -183,16 +179,14 @@ export default function HomePage() {
 
           {/* Form */}
           <div className="animate-fade-up-1">
-            <div className="bg-vp-surface border border-vp-border rounded-xl p-6 sm:p-8">
-              <SessionForm />
-            </div>
+            <SessionForm />
           </div>
 
           {/* Trust marks */}
           <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mt-6 animate-fade-up-2">
             {[
               'Free to start, no card required',
-              'Volleyball England terminology',
+              'Built by a volleyball coach',
               'Mobile-ready for courtside use',
             ].map(item => (
               <span key={item} className="flex items-center gap-1.5 text-xs text-vp-muted/50">
@@ -256,7 +250,7 @@ export default function HomePage() {
               </h2>
             </div>
             <p className="text-vp-muted text-base leading-relaxed lg:mt-2">
-              A full session with 6-8 drills. A court diagram for each one. Coaching points that make sense.
+              A full session with 6-8 drills. A court diagram for each one. Coaching points you can say out loud.
               A timeline so you know exactly how long everything takes.
               Equipment lists so you&apos;re not raiding the kit bag mid-session.
               Below is a real example, generated in 47 seconds.
@@ -284,21 +278,21 @@ export default function HomePage() {
                 {
                   n: '01',
                   title: 'Tell it what you\'re working on',
-                  body: 'Describe your session focus, how many players you\'ve got, their level, and how long you have. Be as specific as you like.',
+                  body: 'Write what you\'re working on — serve receive, attacking, game play, pre-season fitness. Add your player count, their level, and how long you have. The more context you give, the more the plan fits your actual squad.',
                 },
                 {
                   n: '02',
-                  title: 'Plan is generated',
-                  body: 'The AI builds a structured session around your squad. It knows the difference between a beginners\' club night and an intermediate team in tournament prep.',
+                  title: 'Your plan is ready',
+                  body: 'In under a minute you get a full session: 6–8 drills, a court diagram for each one, coaching points, timings, and an equipment list. A beginners\' club night looks nothing like tournament prep — the AI knows the difference.',
                 },
                 {
                   n: '03',
-                  title: 'Coach with confidence',
-                  body: 'View it on your phone at the side of the court, or print it out. Every drill has a diagram and instructions you can brief in under a minute.',
+                  title: 'Take it to training',
+                  body: 'Open it on your phone at the side of the court, or print it before you leave. Tap any drill to see the full diagram and instructions. You\'re not scrambling for ideas mid-session. You\'ve got a plan.',
                 },
               ].map(item => (
                 <div key={item.n}>
-                  <p className="font-display font-bold text-5xl text-vp-border mb-4 leading-none">{item.n}</p>
+                  <p className="font-display font-bold text-5xl text-vp-muted/30 mb-4 leading-none">{item.n}</p>
                   <h3 className="text-vp-text font-semibold text-sm mb-2">{item.title}</h3>
                   <p className="text-vp-muted text-sm leading-relaxed">{item.body}</p>
                 </div>
@@ -355,19 +349,18 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 lg:gap-20 items-start mb-12">
             <div>
-              <p className="text-xs font-medium uppercase tracking-widest text-orange mb-4">Built for you</p>
               <h2 className="font-display font-bold uppercase tracking-tight text-vp-text leading-[0.95] text-[clamp(2.5rem,5vw,3.5rem)]">
-                Made for<br />grassroots<br />coaches
+                Made for<br />volleyball<br />coaches
               </h2>
               <p className="text-vp-muted mt-4 text-sm leading-relaxed">
-                I coach and referee at a grassroots club.
+                I coach and referee at a volleyball club.
                 Planning sessions is the bit I find hardest to make time for.
                 That&apos;s why I built this.
               </p>
             </div>
             <p className="text-vp-muted text-base leading-relaxed lg:mt-2">
               Everything is designed around how you actually coach, not how a tech company thinks you coach.
-              Volleyball England terminology, diagrams you can brief from, and a mobile view that works
+              Volleyball terminology, diagrams you can brief from, and a mobile view that works
               when you&apos;re standing in a sports hall with 12 players staring at you.
             </p>
           </div>
@@ -386,8 +379,7 @@ export default function HomePage() {
               What coaches<br />say
             </h2>
             <p className="text-vp-muted text-base leading-relaxed lg:mt-2">
-              From head coaches at established clubs to university captains running their first sessions,
-              VolleyPlanner is used by coaches at every level of the grassroots game.
+              Coaches at clubs, universities, and academies use VolleyPlanner — from first-time sessions to tournament prep.
             </p>
           </div>
 
@@ -452,7 +444,7 @@ export default function HomePage() {
 
             <div>
               <h2 className="font-display font-bold uppercase tracking-tight text-vp-text leading-[0.95] text-[clamp(2.5rem,5vw,3.5rem)]">
-                Simple<br />pricing
+                Two plans.<br />No surprises.
               </h2>
               <p className="text-vp-muted mt-4 text-sm leading-relaxed max-w-xs">
                 Start for free. Upgrade if you need more.
@@ -495,7 +487,7 @@ export default function HomePage() {
                   <span className="font-display font-bold text-4xl text-vp-text">£6</span>
                   <span className="text-sm text-vp-muted ml-2">/ month</span>
                 </div>
-                <p className="text-sm text-vp-muted mb-5">Unlimited plans, saved history and more.</p>
+                <p className="text-sm text-vp-muted mb-5">Unlimited plans, full session history, PDF export.</p>
                 <ul className="space-y-2.5 text-sm mb-7">
                   {[
                     'Everything in Free',
@@ -530,10 +522,10 @@ export default function HomePage() {
         <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-40 text-center">
           <p className="text-xs font-medium uppercase tracking-widest text-orange mb-8">Ready?</p>
           <h2 className="font-display font-bold uppercase tracking-tight text-vp-text leading-[0.92] text-[clamp(2.4rem,8vw,7rem)] mb-8">
-            Good coaching<br className="hidden sm:block" /> shouldn&apos;t need<br className="hidden sm:block" /> a good memory.
+            Walk into training<br className="hidden sm:block" /> with a plan.<br className="hidden sm:block" /> Every time.
           </h2>
           <p className="text-vp-muted text-lg mb-12 max-w-lg mx-auto leading-relaxed">
-            Describe your session. We&apos;ll remember the rest.
+            Describe your session. Ready in under a minute.
           </p>
           <a
             href="#plan-form"
@@ -541,7 +533,7 @@ export default function HomePage() {
           >
             Plan tonight&apos;s session <ArrowRight size={18} />
           </a>
-          <p className="text-vp-muted/50 text-sm mt-5">Free to use · No account needed</p>
+          <p className="text-vp-muted/50 text-sm mt-5">Free account · No card required</p>
         </div>
       </section>
 

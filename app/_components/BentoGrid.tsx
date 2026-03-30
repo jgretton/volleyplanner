@@ -65,8 +65,8 @@ export function BentoGrid() {
 
       {/* Cell 2 — Speed */}
       <div className="bg-vp-surface p-6 flex flex-col gap-3">
-        <div className="w-9 h-9 rounded-lg bg-orange/10 border border-orange/20 flex items-center justify-center">
-          <Zap size={16} className="text-orange" />
+        <div className="w-9 h-9 rounded-lg bg-vp-surface-2 border border-vp-border flex items-center justify-center">
+          <Zap size={16} className="text-vp-muted" />
         </div>
         <h3 className="text-vp-text font-semibold text-sm">Ready in under 60 seconds</h3>
         <p className="text-xs text-vp-muted leading-relaxed">
@@ -108,7 +108,7 @@ export function BentoGrid() {
         <div className="w-9 h-9 rounded-lg bg-vp-surface-2 border border-vp-border flex items-center justify-center">
           <BookOpen size={16} className="text-vp-muted" />
         </div>
-        <h3 className="text-vp-text font-semibold text-sm">Volleyball England terminology</h3>
+        <h3 className="text-vp-text font-semibold text-sm">Volleyball terminology, done right</h3>
         <p className="text-xs text-vp-muted leading-relaxed">
           Libero, serve receive, rally point scoring, 5-1 rotation — it speaks the same language you do.
         </p>

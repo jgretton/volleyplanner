@@ -58,7 +58,10 @@ export function PlanShowcase() {
 
         {/* Drill header */}
         <div className="px-6 sm:px-8 py-5 border-b border-vp-border">
-          <div className="flex flex-wrap items-center gap-2 mb-1">
+          <h4 className="text-base font-semibold text-vp-text mb-2.5">
+            Serve Receive Positioning Patterns
+          </h4>
+          <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
               Technical
             </span>
@@ -69,9 +72,6 @@ export function PlanShowcase() {
               6 passers
             </span>
           </div>
-          <h4 className="text-base font-semibold text-vp-text">
-            Serve Receive Positioning Patterns
-          </h4>
         </div>
 
         {/* Drill body — diagram + content */}

@@ -312,9 +312,6 @@ export function SessionForm({ hideSubmit = false, formId = 'plan-form' }: { hide
         ))}
       </div>
 
-      <p className="text-center text-xs text-vp-muted/50 mt-5">
-        Free account · No password needed
-      </p>
 
     </form>
   )
