@@ -5,9 +5,26 @@ import { ThumbsUp, ThumbsDown, RefreshCw, ArrowLeftRight, Loader2 } from 'lucide
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { DrillDiagram } from './DrillDiagram'
+import { cn } from '@/lib/utils'
 import type { Drill } from '@/types/plan'
 
 const phaseLeftBorder: Record<string, string> = {
+  'Warm-up':     'border-l-amber-500',
+  'Technical':   'border-l-blue-500',
+  'Progressive': 'border-l-blue-400',
+  'Game-based':  'border-l-orange',
+  'Cool-down':   'border-l-teal-500',
+}
+
+const phaseHeaderBg: Record<string, string> = {
+  'Warm-up':     'bg-amber-500/[0.06]',
+  'Technical':   'bg-blue-500/[0.06]',
+  'Progressive': 'bg-blue-400/[0.06]',
+  'Game-based':  'bg-orange/[0.06]',
+  'Cool-down':   'bg-teal-500/[0.06]',
+}
+
+const phaseProgressionBorder: Record<string, string> = {
   'Warm-up':     'border-l-amber-500',
   'Technical':   'border-l-blue-500',
   'Progressive': 'border-l-blue-400',
@@ -33,10 +50,13 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
     return localStorage.getItem(storageKey) ?? ''
   })
   const [feedback, setFeedback] = useState<'liked' | 'disliked' | null>(initialFeedback ?? null)
+  const [saved, setSaved] = useState(false)
 
   function handleNotesChange(value: string) {
     setNotes(value)
     localStorage.setItem(storageKey, value)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
   }
 
   async function handleFeedback(value: 'liked' | 'disliked') {
@@ -62,17 +82,85 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
     }
   }
 
-  const borderColour  = phaseLeftBorder[drill.phase] ?? 'border-l-vp-border'
-  const hasDiagram    = drill.diagram_type !== 'none'
+  const borderColour = phaseLeftBorder[drill.phase] ?? 'border-l-vp-border'
+  const hasDiagram   = drill.diagram_type !== 'none'
 
   return (
     <Card className={`border-l-4 ${borderColour} overflow-hidden print-drill-card`}>
 
-      {/* ── Full-width header ──────────────────────────────────────────── */}
-      <div className="px-6 md:px-8 pt-6 md:pt-7 pb-5 border-b border-vp-border">
-        <h3 className="text-lg font-semibold text-vp-text mb-2.5 leading-snug">
-          {drill.name}
-        </h3>
+      {/* ── Header ──────────────────────────────────────────────────── */}
+      <div className={cn('px-6 md:px-8 pt-6 md:pt-7 pb-5 border-b border-vp-border', phaseHeaderBg[drill.phase])}>
+
+        <div className="flex items-start justify-between gap-3 mb-2.5">
+          <h3 className="font-display font-bold uppercase text-xl text-vp-text leading-tight tracking-tight">
+            {drill.name}
+          </h3>
+
+          {/* Header action buttons */}
+          <div className="flex items-center gap-1 shrink-0 print:hidden">
+            {isPro && (
+              <>
+                <button
+                  onClick={() => handleFeedback('liked')}
+                  title="Liked it"
+                  className={cn(
+                    'w-7 h-7 rounded-md border flex items-center justify-center transition-colors duration-150',
+                    feedback === 'liked'
+                      ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                      : 'border-vp-border text-vp-muted hover:text-green-400 hover:border-green-500/30'
+                  )}
+                  aria-label="Rate drill positively"
+                >
+                  <ThumbsUp size={12} />
+                </button>
+                <button
+                  onClick={() => handleFeedback('disliked')}
+                  title="Not for us"
+                  className={cn(
+                    'w-7 h-7 rounded-md border flex items-center justify-center transition-colors duration-150',
+                    feedback === 'disliked'
+                      ? 'bg-red-500/10 border-red-500/30 text-red-400'
+                      : 'border-vp-border text-vp-muted hover:text-red-400 hover:border-red-500/30'
+                  )}
+                  aria-label="Rate drill negatively"
+                >
+                  <ThumbsDown size={12} />
+                </button>
+                {(onRegenerate || onSwap) && (
+                  <div className="w-px h-4 bg-vp-border mx-0.5" />
+                )}
+              </>
+            )}
+
+            {onRegenerate && (
+              <button
+                onClick={() => !regenerating && onRegenerate(index)}
+                disabled={regenerating}
+                title="Regenerate drill"
+                className="w-7 h-7 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
+                aria-label="Regenerate drill"
+              >
+                {regenerating
+                  ? <Loader2 size={12} className="animate-spin text-orange" />
+                  : <RefreshCw size={12} />
+                }
+              </button>
+            )}
+
+            {onSwap && (
+              <button
+                onClick={() => !regenerating && onSwap(index)}
+                disabled={regenerating}
+                title="Choose an alternative drill"
+                className="w-7 h-7 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
+                aria-label="Choose an alternative drill"
+              >
+                <ArrowLeftRight size={12} />
+              </button>
+            )}
+          </div>
+        </div>
+
         <div className="flex flex-wrap gap-2">
           <Badge variant="phase" phase={drill.phase}>{drill.phase}</Badge>
           <Badge>{drill.duration} min</Badge>
@@ -83,11 +171,9 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
       {/* ── Body ──────────────────────────────────────────────────────── */}
       <div className={hasDiagram ? 'flex flex-col md:flex-row print-drill-body' : 'print-drill-body'}>
 
-        {/* Left column — diagram + equipment (only when diagram present) */}
+        {/* Left column — diagram + equipment */}
         {hasDiagram && (
           <div className="md:w-64 shrink-0 p-6 md:p-8 border-b md:border-b-0 md:border-r border-vp-border flex flex-col gap-5 print-diagram-col">
-
-            {/* Diagram */}
             <div className="relative rounded-lg overflow-hidden border border-vp-border group">
               <DrillDiagram
                 type={drill.diagram_type}
@@ -103,7 +189,6 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
               </p>
             )}
 
-            {/* Equipment lives under the diagram — need it before you start */}
             {drill.equipment.length > 0 && (
               <div>
                 <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-2">
@@ -119,11 +204,10 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
                 </ul>
               </div>
             )}
-
           </div>
         )}
 
-        {/* Right column — all instructional content */}
+        {/* Right column — instructional content */}
         <div className="flex-1 min-w-0 p-6 md:p-8 space-y-6">
 
           {/* Setup */}
@@ -134,9 +218,9 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
             <p className="text-sm text-vp-muted leading-relaxed">{drill.setup}</p>
           </div>
 
-          {/* Instructions */}
+          {/* Instructions — primary content */}
           <div className="border-t border-vp-border pt-6">
-            <h4 className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-4">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-vp-text mb-4">
               Instructions
             </h4>
             <ol className="space-y-3.5">
@@ -166,9 +250,12 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
             </ul>
           </div>
 
-          {/* Progression */}
+          {/* Progression — phase-accented */}
           <div className="border-t border-vp-border pt-6">
-            <div className="bg-vp-surface-2 border border-vp-border rounded-lg px-4 py-3.5">
+            <div className={cn(
+              'bg-vp-surface-2 border border-vp-border border-l-4 rounded-lg px-4 py-3.5',
+              phaseProgressionBorder[drill.phase] ?? 'border-l-orange'
+            )}>
               <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-1.5">
                 Progression
               </p>
@@ -176,7 +263,7 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
             </div>
           </div>
 
-          {/* Equipment — no diagram case only */}
+          {/* Equipment — no diagram case */}
           {!hasDiagram && drill.equipment.length > 0 && (
             <div className="border-t border-vp-border pt-6">
               <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-2">
@@ -195,102 +282,25 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
 
           {/* Coach notes */}
           <div className="border-t border-vp-border pt-6">
-            <p className="text-xs font-medium uppercase tracking-widest text-vp-muted block mb-2.5">
-              Your notes
-            </p>
-            {notes ? (
-              <p className="text-sm text-vp-text leading-relaxed">{notes}</p>
-            ) : (
-              <textarea
-                value={notes}
-                onChange={e => handleNotesChange(e.target.value)}
-                rows={2}
-                className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-3 py-2.5 text-base text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors resize-none print:hidden"
-                placeholder="Add your own notes for this drill..."
-              />
-            )}
-          </div>
-
-          {/* Feedback */}
-          {isPro ? (
-            <div className="flex items-center gap-2 print:hidden">
-              <span className="text-xs text-vp-muted/50 mr-1">Rate this drill</span>
-              <button
-                onClick={() => handleFeedback('liked')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-xs transition-colors ${
-                  feedback === 'liked'
-                    ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                    : 'border-vp-border text-vp-muted hover:text-green-400 hover:border-green-500/30'
-                }`}
-                aria-label="Rate drill positively"
-              >
-                <ThumbsUp size={12} /> Liked it
-              </button>
-              <button
-                onClick={() => handleFeedback('disliked')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-xs transition-colors ${
-                  feedback === 'disliked'
-                    ? 'bg-red-500/10 border-red-500/30 text-red-400'
-                    : 'border-vp-border text-vp-muted hover:text-red-400 hover:border-red-500/30'
-                }`}
-                aria-label="Rate drill negatively"
-              >
-                <ThumbsDown size={12} /> Not for us
-              </button>
+            <div className="flex items-center justify-between mb-2.5">
+              <p className="text-xs font-medium uppercase tracking-widest text-vp-muted">
+                Your notes
+              </p>
+              {saved && (
+                <span className="text-xs text-green-400/70 transition-opacity">Saved</span>
+              )}
             </div>
-          ) : (
-            <p className="text-xs text-vp-muted/50 print:hidden">
-              Rate drills on <span className="text-orange">Pro</span>
-            </p>
-          )}
+            <textarea
+              value={notes}
+              onChange={e => handleNotesChange(e.target.value)}
+              rows={2}
+              className="w-full bg-vp-surface-2 border border-vp-border rounded-md px-3 py-2.5 text-sm text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors resize-none print:hidden"
+              placeholder="Add your own notes for this drill..."
+            />
+          </div>
 
         </div>
       </div>
-
-      {/* ── Pro actions ────────────────────────────────────────────────── */}
-      {(onRegenerate || onSwap) && (
-        <div className="border-t border-vp-border grid grid-cols-2 divide-x divide-vp-border print:hidden">
-          {onRegenerate && (
-            <button
-              onClick={() => !regenerating && onRegenerate(index)}
-              disabled={regenerating}
-              className="flex items-start gap-3 px-5 py-4 hover:bg-vp-surface-2 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed group text-left"
-            >
-              <div className="w-7 h-7 rounded-md bg-vp-surface-2 group-hover:bg-vp-border border border-vp-border flex items-center justify-center shrink-0 mt-0.5 transition-colors">
-                {regenerating
-                  ? <Loader2 size={13} className="animate-spin text-orange" />
-                  : <RefreshCw size={13} className="text-vp-muted group-hover:text-vp-text transition-colors" />
-                }
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-vp-text leading-snug">
-                  {regenerating ? 'Regenerating…' : 'Regenerate drill'}
-                </p>
-                <p className="text-xs text-vp-muted mt-0.5 leading-relaxed">
-                  Replace this drill with a fresh alternative for the same phase and duration.
-                </p>
-              </div>
-            </button>
-          )}
-          {onSwap && (
-            <button
-              onClick={() => !regenerating && onSwap(index)}
-              disabled={regenerating}
-              className="flex items-start gap-3 px-5 py-4 hover:bg-vp-surface-2 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed group text-left"
-            >
-              <div className="w-7 h-7 rounded-md bg-vp-surface-2 group-hover:bg-vp-border border border-vp-border flex items-center justify-center shrink-0 mt-0.5 transition-colors">
-                <ArrowLeftRight size={13} className="text-vp-muted group-hover:text-vp-text transition-colors" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-vp-text leading-snug">Choose an alternative</p>
-                <p className="text-xs text-vp-muted mt-0.5 leading-relaxed">
-                  See 3 different drills and pick the one that best suits your squad.
-                </p>
-              </div>
-            </button>
-          )}
-        </div>
-      )}
     </Card>
   )
 }
