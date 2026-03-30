@@ -19,8 +19,8 @@ export function Footer() {
           <div>
             <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-4">Product</p>
             <div className="flex flex-col gap-3 text-sm">
-              <Link href="#how-it-works" className="text-vp-muted hover:text-orange transition-colors duration-150">How it works</Link>
-              <Link href="#pricing" className="text-vp-muted hover:text-orange transition-colors duration-150">Pricing</Link>
+              <Link href="/#how-it-works" className="text-vp-muted hover:text-orange transition-colors duration-150">How it works</Link>
+              <Link href="/#pricing" className="text-vp-muted hover:text-orange transition-colors duration-150">Pricing</Link>
               <Link href="/signin" className="text-vp-muted hover:text-orange transition-colors duration-150">Sign in</Link>
             </div>
           </div>
