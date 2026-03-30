@@ -23,18 +23,18 @@ export const metadata: Metadata = {
     default: 'VolleyPlanner - AI Volleyball Session Planner',
     template: '%s | VolleyPlanner',
   },
-  description: 'Generate complete volleyball training session plans in seconds. Court diagrams, drill instructions, and timings tailored to your squad. Free for grassroots coaches in the UK.',
+  description: 'Generate complete volleyball training session plans in seconds. Court diagrams, drill instructions, and timings tailored to your squad.',
   metadataBase: new URL('https://volleyplanner.co.uk'),
   keywords: [
     'volleyball session planner',
     'volleyball coaching',
     'volleyball drills',
     'volleyball training plans',
+    'volleyball practice plan',
     'AI session planner',
-    'grassroots volleyball',
-    'Volleyball England',
-    'volleyball coach UK',
-    'volleyball session plans UK',
+    'volleyball coach app',
+    'volleyball session plan template',
+    'volleyball training session',
     'volleyball training drills',
   ],
   authors: [{ name: 'VolleyPlanner' }],
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'VolleyPlanner - AI Volleyball Session Planner',
-    description: 'Generate complete volleyball training session plans in seconds. Free for grassroots coaches.',
+    description: 'Generate complete volleyball training session plans in seconds. Court diagrams, drills, and timings for your squad.',
     images: ['/og-image.png'],
   },
   robots: {
@@ -86,9 +86,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${barlowCondensed.variable}`}>
       <head>
       </head>
-      <body className="bg-vp-bg text-vp-text min-h-screen antialiased">
+      <body className="bg-vp-bg text-vp-text min-h-screen flex flex-col antialiased">
         <Navbar />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <Toaster
           theme="dark"

@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { toast } from 'sonner'
-import { Plus, ArrowRight, RefreshCw, FileText, BookOpen, Shuffle, Search, X, ThumbsUp, AlertTriangle } from 'lucide-react'
+import { Plus, ArrowRight, Search, X, ThumbsUp, AlertTriangle } from 'lucide-react'
 import { PlanCard } from '@/components/plan/PlanCard'
 import { LockedPlanCard } from '@/components/plan/LockedPlanCard'
 import { NewPlanModal } from '@/components/plan/NewPlanModal'
@@ -29,12 +29,6 @@ function formatResetDate(iso: string) {
 
 const FREE_LIMIT = 3
 
-const PRO_BENEFITS = [
-  { icon: BookOpen,  text: 'Unlimited plans every month' },
-  { icon: RefreshCw, text: 'Regenerate or swap any drill on the fly' },
-  { icon: FileText,  text: 'Export to PDF and share with your squad' },
-  { icon: Shuffle,   text: 'Full session history — never lose a plan' },
-]
 
 function formatLastSession(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -109,7 +103,7 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
   }, [plans, filter, search])
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
       <NewPlanModal open={modalOpen} onOpenChange={setModalOpen} />
 
@@ -144,7 +138,6 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <div>
-          <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-2">Dashboard</p>
           <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl text-vp-text leading-[0.92] tracking-tight">
             My plans
           </h1>
@@ -200,47 +193,40 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
             />
           </div>
           <p className="text-xs text-vp-muted/60 mt-3">
-            Your most recent plan is always saved here.
+            {used >= FREE_LIMIT
+              ? 'All 3 plans used. Resets ' + resetDate + '.'
+              : `${FREE_LIMIT - used} session${FREE_LIMIT - used !== 1 ? 's' : ''} left this month.`}
           </p>
-          {used >= FREE_LIMIT && (
-            <p className="text-xs text-orange mt-1">
-              You've used all your free plans this month.
-            </p>
-          )}
         </div>
       )}
 
-      {/* Pro: stats strip + search + filter */}
+      {/* Pro: stats + search + filter */}
       {profile.is_pro && (
-        <div className="mb-6 space-y-4">
-          {/* Stats strip */}
+        <div className="mb-8 space-y-4">
+
+          {/* Stat tiles */}
           {plans.length > 0 && (
-            <div className="flex items-center gap-6 px-1">
-              <div className="flex items-center gap-2">
-                <span className="font-display font-bold text-2xl text-vp-text leading-none tracking-tight">{plans.length}</span>
-                <span className="text-xs text-vp-muted">plan{plans.length !== 1 ? 's' : ''} saved</span>
+            <div className="bg-vp-surface border border-vp-border rounded-xl grid grid-cols-3 divide-x divide-vp-border">
+              <div className="px-5 py-4 flex flex-col gap-1">
+                <span className="font-display font-bold text-3xl text-vp-text leading-none tracking-tight">{plans.length}</span>
+                <span className="text-xs text-vp-muted">session{plans.length !== 1 ? 's' : ''} planned</span>
               </div>
-              <div className="w-px h-5 bg-vp-border" />
-              <div className="flex items-center gap-2">
-                <span className="font-display font-bold text-2xl text-vp-text leading-none tracking-tight">{likedCount}</span>
-                <span className="text-xs text-vp-muted">liked</span>
+              <div className="px-5 py-4 flex flex-col gap-1">
+                <span className="font-display font-bold text-3xl text-vp-text leading-none tracking-tight">{likedCount}</span>
+                <span className="text-xs text-vp-muted">plan{likedCount !== 1 ? 's' : ''} liked</span>
               </div>
-              {lastSession && (
-                <>
-                  <div className="w-px h-5 bg-vp-border" />
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-vp-muted">Last session</span>
-                    <span className="text-xs font-medium text-vp-text">{lastSession}</span>
-                  </div>
-                </>
-              )}
+              <div className="px-5 py-4 flex flex-col gap-1">
+                <span className="font-display font-bold text-3xl text-vp-text leading-none tracking-tight">
+                  {lastSession ?? '—'}
+                </span>
+                <span className="text-xs text-vp-muted">last coached</span>
+              </div>
             </div>
           )}
 
           {/* Search + filter row */}
           {plans.length > 0 && (
             <div className="flex items-center gap-3">
-              {/* Search */}
               <div className="relative flex-1 max-w-xs">
                 <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-vp-muted/50 pointer-events-none" />
                 <input
@@ -248,7 +234,7 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   placeholder="Search plans…"
-                  className="w-full bg-vp-surface-2 border border-vp-border rounded-md pl-8 pr-8 py-2 text-base text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors"
+                  className="w-full bg-vp-surface-2 border border-vp-border rounded-md pl-8 pr-8 py-2 text-sm text-vp-text placeholder:text-vp-muted/40 focus:outline-none focus:border-orange/50 focus:ring-1 focus:ring-orange/20 transition-colors"
                 />
                 {search && (
                   <button
@@ -260,7 +246,6 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
                 )}
               </div>
 
-              {/* Filter tabs */}
               <div className="flex items-center gap-1 bg-vp-surface-2 border border-vp-border rounded-lg p-1 ml-auto">
                 {(['all', 'liked'] as const).map(f => (
                   <button
@@ -321,12 +306,11 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
           {/* Pro empty state — no plans at all */}
           {!search.trim() && filter === 'all' && profile.is_pro && (
             <div className="bg-vp-surface border border-vp-border rounded-xl px-6 py-16 text-center">
-              <p className="text-xs font-medium uppercase tracking-widest text-orange mb-4">Ready when you are</p>
               <h2 className="font-display font-bold uppercase text-3xl text-vp-text leading-[0.92] tracking-tight mb-3">
-                Your first plan<br />is one click away
+                Thursday&rsquo;s session<br />is waiting.
               </h2>
               <p className="text-sm text-vp-muted mb-6 max-w-xs mx-auto">
-                Every plan you generate is saved here — full history, any time.
+                Every plan you generate is saved here — come back any time.
               </p>
               <button
                 onClick={() => setModalOpen(true)}
@@ -342,7 +326,7 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
           {!search.trim() && filter === 'all' && !profile.is_pro && (
             <div className="bg-vp-surface border border-vp-border rounded-xl px-6 py-16 text-center">
               <p className="text-vp-muted text-sm mb-4">
-                No plans yet. Generate your first session plan to get started.
+                Nothing here yet. Plan your first session.
               </p>
               <button
                 onClick={() => setModalOpen(true)}
@@ -402,16 +386,11 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
                   VolleyPlanner Pro
                 </p>
                 <h2 className="font-display font-bold uppercase text-3xl sm:text-4xl text-vp-text leading-[0.92] tracking-tight mb-4">
-                  Coach without limits
+                  More sessions.<br />Less planning.
                 </h2>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-6">
-                  {PRO_BENEFITS.map(({ icon: Icon, text }) => (
-                    <li key={text} className="flex items-center gap-2.5 text-sm text-vp-muted">
-                      <Icon size={13} className="text-orange shrink-0" />
-                      {text}
-                    </li>
-                  ))}
-                </ul>
+                <p className="text-sm text-vp-muted leading-relaxed">
+                  Unlimited plans, every session saved. Regenerate drills, export to PDF, share with your squad.
+                </p>
               </div>
 
               {/* Right — CTA */}

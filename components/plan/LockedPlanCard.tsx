@@ -31,7 +31,7 @@ export function LockedPlanCard() {
           <Lock size={15} className="text-vp-muted" />
         </div>
         <div className="text-center px-4">
-          <p className="text-xs font-medium text-vp-text mb-1">Pro unlocks full history</p>
+          <p className="text-xs font-medium text-vp-text mb-1">Your full session history</p>
           <p className="text-xs text-vp-muted">Save every plan, revisit any time.</p>
         </div>
         <button className="text-xs font-medium text-orange border border-orange/30 bg-orange/10 hover:bg-orange hover:text-white px-4 py-2 rounded-md transition-all duration-150">

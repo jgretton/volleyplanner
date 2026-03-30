@@ -83,7 +83,6 @@ export function BillingClient({ email, profile }: BillingClientProps) {
           <ArrowLeft size={12} />
           Back to dashboard
         </Link>
-        <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-2">Account</p>
         <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl text-vp-text leading-[0.92] tracking-tight">
           Billing
         </h1>
@@ -133,7 +132,7 @@ export function BillingClient({ email, profile }: BillingClientProps) {
           <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-4">Manage subscription</p>
 
           <p className="text-sm text-vp-muted mb-5 leading-relaxed">
-            Update your payment method, download invoices, or cancel your subscription — all handled securely via Stripe.
+            Update your payment method, download invoices, or cancel your subscription, all via Stripe.
           </p>
 
           <div className="flex items-center gap-3">
@@ -178,10 +177,10 @@ export function BillingClient({ email, profile }: BillingClientProps) {
         <div className="bg-vp-surface border border-orange/20 rounded-xl p-6">
           <p className="text-xs font-medium uppercase tracking-widest text-orange mb-3">VolleyPlanner Pro</p>
           <h2 className="font-display font-bold uppercase text-2xl text-vp-text leading-[0.92] tracking-tight mb-2">
-            Unlock unlimited plans
+            More than 3 sessions a month?
           </h2>
           <p className="text-sm text-vp-muted mb-5">
-            £6/month — unlimited plans, full history, PDF export, and more.
+            £6/month — unlimited plans, full session history, PDF export, regenerate any drill.
           </p>
           <button className="flex items-center gap-2 bg-orange text-white px-4 py-2.5 rounded-md text-sm font-medium hover:bg-orange/90 transition-all duration-150 active:scale-[0.98]">
             Upgrade to Pro
