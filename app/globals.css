@@ -79,11 +79,11 @@ input[type="range"]::-moz-range-thumb {
   to   { opacity: 1; transform: translateY(0);     }
 }
 
+
 .animate-fade-up   { animation: fadeUp 0.45s ease both; }
 .animate-fade-up-1 { animation: fadeUp 0.45s ease 0.1s both; }
 .animate-fade-up-2 { animation: fadeUp 0.45s ease 0.2s both; }
 .animate-fade-up-3 { animation: fadeUp 0.45s ease 0.3s both; }
-
 /* Ensure elements are fully visible when animations are disabled — prevents
    opacity:0 getting stuck (e.g. iOS Reduce Motion, low-power mode) */
 @media (prefers-reduced-motion: reduce) {
