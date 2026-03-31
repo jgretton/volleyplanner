@@ -25,7 +25,6 @@ function PlanPageContent() {
     if (typeof window === 'undefined') return 'full'
     return window.innerWidth < 768 ? 'session' : 'full'
   })
-  const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null)
   const [swapIndex, setSwapIndex]   = useState<number | null>(null)
   const [swapOptions, setSwapOptions] = useState<Drill[] | null>(null)
   const [swapLoading, setSwapLoading] = useState(false)
@@ -97,30 +96,6 @@ function PlanPageContent() {
     generatePlan()
   }, [searchParams, router])
 
-  const handleRegenerate = useCallback(async (index: number) => {
-    if (!plan) return
-    setRegeneratingIndex(index)
-    try {
-      const res = await fetch('/api/drill/regenerate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ drill_index: index, plan }),
-      })
-      const json = await res.json()
-      if (!res.ok) return
-      setPlan(prev => {
-        if (!prev) return prev
-        const drills = [...prev.drills]
-        drills[index] = json.data
-        return { ...prev, drills }
-      })
-    } catch {
-      // Silently fail — user can retry
-    } finally {
-      setRegeneratingIndex(null)
-    }
-  }, [plan])
-
   const handleSwapOpen = useCallback(async (index: number) => {
     if (!plan) return
     setSwapIndex(index)
@@ -184,7 +159,7 @@ function PlanPageContent() {
           Monthly limit reached
         </h2>
         <p className="text-vp-muted mb-8 leading-relaxed">
-          You&apos;ve used your 3 free plans this month. Upgrade to Pro for unlimited plans - just £6/month.
+          You&apos;ve used your 3 free plans this month. Upgrade to Pro for unlimited plans — just $6/month, or $5/month billed annually.
         </p>
         <Button variant="accent" size="lg">Upgrade to Pro</Button>
         <p className="text-xs text-vp-muted/50 mt-4">Plans reset on the 1st of each month.</p>
@@ -248,8 +223,6 @@ function PlanPageContent() {
         <PlanView
           plan={plan}
           isPro={isPro}
-          regeneratingIndex={regeneratingIndex}
-          onRegenerate={isPro ? handleRegenerate : undefined}
           onSwap={isPro ? handleSwapOpen : undefined}
         />
       ) : (

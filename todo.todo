@@ -1,0 +1,15 @@
+☐ Remove regenerate drills and only have swap for alternatives.
+☐ we need to work on the svg diagrams.
+☐ we need to find official volleyball plans and then we can mimic these as the ones we are creating are good but the way the information is structured is not good for coacheas. we are assuming they know what they are doing. We need to write this so that experienced coaches arent being spoken too in a condescending way and beginner coaches are able to understand it too.
+
+
+☐ on the building page we show skeleton loading and a spinner saying building. However, i dont think this is good UX as the user cannot see if something is working or stuck. WE need to think about other ways to display this page.
+
+☐ We need to reassess the pricing model. At the moment we will be out of business if no one becomes a pro member. IS the 3 per month a good amount for free? Or do we make it 2? LEts think deeply about this.
+
+
+☐ equipment list is at the bottom of the drill cards that dont have diagrams.
+
+☐ the like dislike buttons need to be better on mobile as they are on the same line as the title in the drill card so they squash it on mobile.
+
+☐ the pre built plans on the inputs, when the user clicks one it highlights but then if they dont want it. they have to select all and delete the input box. we need an easier way to clear back to default or just empty the box.

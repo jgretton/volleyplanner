@@ -210,8 +210,7 @@ export async function regenerateDrill(
   }
 
   try {
-    const cleaned = response.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim()
-    const result = DrillSchema.safeParse(JSON.parse(cleaned))
+    const result = DrillSchema.safeParse(extractJson(response))
     if (!result.success) throw new Error('generation_failed')
     return result.data
   } catch {
@@ -250,13 +249,25 @@ export async function swapDrill(
   }
 
   try {
-    const cleaned = response.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim()
-    const result = z.array(DrillSchema).safeParse(JSON.parse(cleaned))
+    const result = z.array(DrillSchema).safeParse(extractJson(response))
     if (!result.success) throw new Error('generation_failed')
     return result.data
   } catch {
     throw new Error('generation_failed')
   }
+}
+
+// ── JSON extraction helper ───────────────────────────────────────────────────
+
+function extractJson(text: string): unknown {
+  // Find the outermost JSON object in the response — handles preamble,
+  // markdown code fences, and any trailing text Claude might add.
+  const start = text.indexOf('{')
+  const end   = text.lastIndexOf('}')
+  if (start === -1 || end === -1 || end < start) {
+    throw new Error('No JSON object found in response')
+  }
+  return JSON.parse(text.slice(start, end + 1))
 }
 
 // ── Main generation function ─────────────────────────────────────────────────
@@ -285,14 +296,13 @@ export async function generateSessionPlan(
     throw new Error('generation_failed')
   }
 
-  // Parse and validate — retry once on failure
+  // Parse — try extraction first, retry once if it fails
   let parsed: unknown
 
   try {
-    const cleaned = response.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim()
-    parsed = JSON.parse(cleaned)
+    parsed = extractJson(response)
   } catch {
-    console.error('JSON parse failed on first attempt, retrying...')
+    console.error('JSON extraction failed on first attempt, retrying...')
     try {
       const retryMessage = await anthropic.messages.create({
         model: 'claude-haiku-4-5-20251001',
@@ -301,13 +311,12 @@ export async function generateSessionPlan(
         messages: [
           { role: 'user', content: prompt },
           { role: 'assistant', content: response },
-          { role: 'user', content: 'Your response was not valid JSON. Please respond with only the JSON object, no markdown, no explanation.' },
+          { role: 'user', content: 'Your response was not valid JSON. Respond with only the raw JSON object — no markdown, no code fences, no explanation.' },
         ],
       })
       const retryContent = retryMessage.content[0]
       if (retryContent.type !== 'text') throw new Error('generation_failed')
-      const cleaned = retryContent.text.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim()
-      parsed = JSON.parse(cleaned)
+      parsed = extractJson(retryContent.text)
     } catch {
       throw new Error('generation_failed')
     }

@@ -103,7 +103,7 @@ export function BillingClient({ email, profile }: BillingClientProps) {
                   <StatusBadge status={profile.subscription_status} />
                 </div>
                 <p className="text-sm text-vp-muted">
-                  £6 / month · unlimited plans · full session history
+                  Unlimited plans · full session history
                 </p>
               </>
             ) : (
@@ -180,7 +180,7 @@ export function BillingClient({ email, profile }: BillingClientProps) {
             More than 3 sessions a month?
           </h2>
           <p className="text-sm text-vp-muted mb-5">
-            £6/month — unlimited plans, full session history, PDF export, regenerate any drill.
+            $6/month (or $5/month billed annually) — unlimited plans, full session history, PDF export, swap any drill for alternatives.
           </p>
           <button className="flex items-center gap-2 bg-orange text-white px-4 py-2.5 rounded-md text-sm font-medium hover:bg-orange/90 transition-all duration-150 active:scale-[0.98]">
             Upgrade to Pro

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ThumbsUp, ThumbsDown, RefreshCw, ArrowLeftRight, Loader2, Lock } from 'lucide-react'
+import { ThumbsUp, ThumbsDown, ArrowLeftRight, Lock } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { DrillDiagram } from './DrillDiagram'
@@ -38,12 +38,10 @@ interface DrillCardProps {
   isPro?: boolean
   planId?: string
   initialFeedback?: 'liked' | 'disliked' | null
-  regenerating?: boolean
-  onRegenerate?: (index: number) => void
   onSwap?: (index: number) => void
 }
 
-export function DrillCard({ drill, index, isPro, planId, initialFeedback, regenerating, onRegenerate, onSwap }: DrillCardProps) {
+export function DrillCard({ drill, index, isPro, planId, initialFeedback, onSwap }: DrillCardProps) {
   const storageKey = `vp_drill_notes_${encodeURIComponent(drill.name)}`
   const [notes, setNotes] = useState(() => {
     if (typeof window === 'undefined') return ''
@@ -115,38 +113,17 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
           >
             <ThumbsDown size={15} />
           </button>
-          {(onRegenerate || onSwap) && (
+          {onSwap && (
             <div className="w-px h-4 bg-vp-border mx-0.5" />
           )}
         </>
       )}
 
-      {onRegenerate ? (
-        <button
-          onClick={() => !regenerating && onRegenerate(index)}
-          disabled={regenerating}
-          title="Regenerate drill"
-          className="w-11 h-11 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
-          aria-label="Regenerate drill"
-        >
-          {regenerating
-            ? <Loader2 size={12} className="animate-spin text-orange" />
-            : <RefreshCw size={15} />
-          }
-        </button>
-      ) : !isPro && planId ? (
-        <div title="Pro feature — regenerate this drill" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
-          <RefreshCw size={15} />
-          <Lock size={7} className="absolute bottom-0.5 right-0.5 text-vp-muted/50" />
-        </div>
-      ) : null}
-
       {onSwap ? (
         <button
-          onClick={() => !regenerating && onSwap(index)}
-          disabled={regenerating}
+          onClick={() => onSwap(index)}
           title="Choose an alternative drill"
-          className="w-11 h-11 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
+          className="w-11 h-11 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150"
           aria-label="Choose an alternative drill"
         >
           <ArrowLeftRight size={15} />

@@ -396,7 +396,7 @@ export function DashboardPlans({ plans: initialPlans, profile, likedDrills }: Da
               {/* Right — CTA */}
               <div className="flex flex-col items-start sm:items-end gap-2 shrink-0">
                 <div className="text-right mb-1">
-                  <span className="font-display font-bold uppercase text-3xl text-vp-text tracking-tight">£6</span>
+                  <span className="font-display font-bold uppercase text-3xl text-vp-text tracking-tight">$6</span>
                   <span className="text-sm text-vp-muted">/month</span>
                 </div>
                 <button className="flex items-center gap-2 bg-orange text-white px-5 py-3 rounded-md text-sm font-semibold hover:bg-orange/90 transition-all duration-150 active:scale-[0.98] whitespace-nowrap">

@@ -9,12 +9,10 @@ interface PlanViewProps {
   isPro?: boolean
   planId?: string
   drillFeedback?: Record<number, 'liked' | 'disliked'>
-  regeneratingIndex?: number | null
-  onRegenerate?: (index: number) => void
   onSwap?: (index: number) => void
 }
 
-export function PlanView({ plan, isPro, planId, drillFeedback, regeneratingIndex, onRegenerate, onSwap }: PlanViewProps) {
+export function PlanView({ plan, isPro, planId, drillFeedback, onSwap }: PlanViewProps) {
   return (
     <div className="space-y-6">
 
@@ -46,8 +44,6 @@ export function PlanView({ plan, isPro, planId, drillFeedback, regeneratingIndex
           isPro={isPro}
           planId={planId}
           initialFeedback={drillFeedback?.[i] ?? null}
-          regenerating={regeneratingIndex === i}
-          onRegenerate={onRegenerate}
           onSwap={onSwap}
         />
       ))}

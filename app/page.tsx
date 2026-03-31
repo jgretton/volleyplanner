@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { BentoGrid } from "./_components/BentoGrid";
 import { PhoneMockup } from "./_components/PhoneMockup";
 import { PlanShowcase } from "./_components/PlanShowcase";
+import { PricingSection } from "./_components/PricingSection";
 import { Testimonials } from "./_components/Testimonials";
 
 export const metadata: Metadata = {
@@ -41,7 +42,7 @@ const jsonLd = {
 					price: "6",
 					priceCurrency: "GBP",
 					description:
-						"Unlimited session plans, saved history, regenerate drills, PDF export",
+						"Unlimited session plans, saved history, swap individual drills, PDF export",
 					billingIncrement: "P1M",
 				},
 			],
@@ -114,10 +115,10 @@ const jsonLd = {
 				},
 				{
 					"@type": "Question",
-					name: "Can I regenerate or change individual drills?",
+					name: "Can I change individual drills?",
 					acceptedAnswer: {
 						"@type": "Answer",
-						text: "Pro users can regenerate any drill with one click or choose from 3 alternatives. Free users can regenerate the whole plan if they have plans remaining that month.",
+						text: "Yes — Pro users can swap any drill for 3 alternatives with one tap. Free users can run the whole plan again if they have plans remaining that month.",
 					},
 				},
 				{
@@ -125,7 +126,7 @@ const jsonLd = {
 					name: "What does VolleyPlanner Pro include?",
 					acceptedAnswer: {
 						"@type": "Answer",
-						text: "Pro (£6/month) includes unlimited plans, saved plan history, regenerate or swap individual drills, coach notes per drill, PDF export, and the ability to share a plan via link.",
+						text: "Pro ($6/month, or $5/month billed annually) includes unlimited plans, saved plan history, swap individual drills for alternatives, coach notes per drill, PDF export, and the ability to share a plan via link.",
 					},
 				},
 			],
@@ -489,11 +490,11 @@ export default function HomePage() {
 								},
 								{
 									q: "Can I change individual drills?",
-									a: "Pro users can regenerate any drill with one click or choose from 3 alternatives. Free users can run the whole plan again if they have plans remaining that month.",
+									a: "Yes — Pro users can swap any drill for 3 alternatives with one tap. Free users can run the whole plan again if they have plans remaining that month.",
 								},
 								{
 									q: "What does Pro include?",
-									a: "Pro (£6/month) includes unlimited plans, saved plan history, regenerate or swap individual drills, coach notes per drill, PDF export, and the ability to share a plan via link.",
+									a: "Pro ($6/month, or $5/month billed annually) includes unlimited plans, saved plan history, regenerate or swap individual drills, coach notes per drill, PDF export, and the ability to share a plan via link.",
 								},
 							].map(({ q, a }) => (
 								<div
@@ -512,106 +513,7 @@ export default function HomePage() {
 			</section>
 
 			{/* ── Pricing ──────────────────────────────────────────────────────── */}
-			<section id="pricing" className="border-b border-vp-border">
-				<div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-28">
-					<div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 lg:gap-20 items-start">
-						<div>
-							<h2 className="font-display font-bold uppercase tracking-tight text-vp-text leading-[0.95] text-[clamp(2.5rem,5vw,3.5rem)]">
-								Two plans.
-								<br />
-								No surprises.
-							</h2>
-							<p className="text-vp-muted mt-4 text-sm leading-relaxed max-w-xs">
-								Start for free. Upgrade if you need more.
-							</p>
-						</div>
-
-						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-							{/* Free */}
-							<div className="border border-vp-border rounded-xl p-7 bg-vp-surface">
-								<p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-5">
-									Free
-								</p>
-								<div className="mb-4">
-									<span className="font-display font-bold text-4xl text-vp-text">
-										£0
-									</span>
-									<span className="text-sm text-vp-muted ml-2">/ month</span>
-								</div>
-								<p className="text-sm text-vp-muted mb-5">
-									3 plans a month. Free account, no password needed.
-								</p>
-								<ul className="space-y-2.5 text-sm mb-7">
-									{[
-										"AI-generated session plans",
-										"Court diagrams",
-										"Mobile session view",
-										"Print layout",
-									].map((f) => (
-										<li
-											key={f}
-											className="flex items-center gap-3 text-vp-muted"
-										>
-											<Check size={12} className="text-orange shrink-0 mt-px" />
-											{f}
-										</li>
-									))}
-								</ul>
-								<a
-									href="#plan-form"
-									className="block text-center border border-vp-border text-vp-text px-5 py-2.5 rounded-md text-sm font-medium hover:border-vp-muted transition-colors"
-								>
-									Get started free
-								</a>
-							</div>
-
-							{/* Pro */}
-							<div className="border border-orange/30 rounded-xl p-7 bg-vp-surface relative">
-								<div className="absolute top-0 right-6 -translate-y-1/2 bg-orange text-white text-xs font-semibold px-3 py-1 rounded-full">
-									Most popular
-								</div>
-								<p className="text-xs font-medium uppercase tracking-widest text-orange mb-5">
-									Pro
-								</p>
-								<div className="mb-4">
-									<span className="font-display font-bold text-4xl text-vp-text">
-										£6
-									</span>
-									<span className="text-sm text-vp-muted ml-2">/ month</span>
-								</div>
-								<p className="text-sm text-vp-muted mb-5">
-									Unlimited plans, full session history, PDF export.
-								</p>
-								<ul className="space-y-2.5 text-sm mb-7">
-									{[
-										"Everything in Free",
-										"Unlimited plans",
-										"Save and revisit plans",
-										"Regenerate or swap individual drills",
-										"Coach notes per drill",
-										"PDF export",
-										"Share plan via link",
-									].map((f) => (
-										<li
-											key={f}
-											className="flex items-center gap-3 text-vp-muted"
-										>
-											<Check size={12} className="text-orange shrink-0 mt-px" />
-											{f}
-										</li>
-									))}
-								</ul>
-								<a
-									href="#plan-form"
-									className="block text-center bg-orange text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:bg-orange/90 transition-colors"
-								>
-									Start free, upgrade anytime
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
+			<PricingSection />
 
 			{/* ── Final CTA ────────────────────────────────────────────────────── */}
 			<section>

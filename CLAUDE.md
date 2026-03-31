@@ -12,7 +12,7 @@ This file is read by Claude Code at the start of every session. Follow every ins
 
 **Target users**: Volleyball coaches at all levels globally — club, university, academy, recreational. Time-poor, primarily on mobile during sessions.
 
-**Business model**: Free tier (3 plans/month, account required) + Pro tier (unlimited plans, save history, regenerate/swap drills, coach notes, PDF export, share via link).
+**Business model**: Free tier (3 plans/month, account required) + Pro tier (unlimited plans, save history, swap drills for alternatives, coach notes, PDF export, share via link).
 
 ---
 
@@ -386,7 +386,9 @@ These must visually match the real content layout so the transition feels seamle
 ## Stripe Conventions
 
 - Free tier: 3 plans/month (tracked in `profiles.plans_used_this_month`)
-- Pro tier: subscription via Stripe
+- Pro tier: two billing intervals via Stripe:
+  - **Monthly**: $6/month
+  - **Annual**: $5/month, billed as $60/year (marketed as "2 months free")
 - When limit reached: show modal with upgrade CTA, never silently fail
 - Webhook handler must verify signature — reject unverified requests with 400
 - Billing portal accessible from `/dashboard/billing`
@@ -410,8 +412,7 @@ These must visually match the real content layout so the transition feels seamle
 - [x] Dashboard — plan cards, liked plans, search, filter, stat tiles, delete
 - [x] Saved plan viewer — `/plan/[id]` with full and session views
 - [x] Drill feedback — thumbs up/down (Pro), stored in Supabase
-- [x] Regenerate drill (Pro)
-- [x] Swap drill (Pro)
+- [x] Swap drill for alternative (Pro)
 - [x] Stripe integration — subscription, billing portal, webhook handler
 - [x] Loading skeletons — dashboard and saved plan pages
 - [x] ScrollToTop button on plan pages
@@ -439,7 +440,6 @@ These must visually match the real content layout so the transition feels seamle
 **Pro**
 - Unlimited plans
 - Save and revisit plans
-- Regenerate individual drill
 - Swap drill for alternative
 - Coach notes per drill
 - PDF export

@@ -69,8 +69,7 @@ export default function TermsPage() {
           <h2 className="text-vp-text font-semibold text-base mb-3">4. Free and Pro tiers</h2>
           <p>
             Free accounts may generate up to 3 session plans per calendar month. Pro accounts
-            (£6/month) provide unlimited plans and additional features as described on the pricing
-            page.
+            provide unlimited plans and additional features as described on the pricing page.
           </p>
           <p className="mt-3">
             We reserve the right to change pricing or features with reasonable notice. Where

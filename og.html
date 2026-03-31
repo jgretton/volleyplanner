@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1200" />
+  <title>VolleyPlanner — OG Image</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 1200px;
+      height: 630px;
+      max-width: 1200px;
+      max-height: 630px;
+      overflow: hidden;
+      background: #0C1520;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .frame {
+      position: relative;
+      width: 1200px;
+      height: 630px;
+      min-width: 1200px;
+      min-height: 630px;
+      max-width: 1200px;
+      max-height: 630px;
+      background: #0C1520;
+      overflow: hidden;
+    }
+
+    /* ── Left: text content ─────────────────────────────────────────── */
+    .content {
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      left: 0;
+      width: 560px;
+      height: 100%;
+      padding: 64px 0 110px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .label {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #7B90A6;
+      margin-bottom: 16px;
+    }
+
+    .headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 100px;
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .headline .light { color: #E8EEF5; }
+    .headline .accent { color: #FF5820; }
+
+    .subheading {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #7B90A6;
+      line-height: 1.55;
+      max-width: 340px;
+      margin-bottom: 32px;
+    }
+
+    .trust-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #7B90A6;
+    }
+
+    .trust-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #FF5820;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    /* ── Right: plan mockup ─────────────────────────────────────────── */
+    .plan-panel {
+      position: absolute;
+      z-index: 10;
+      /* 1/3 down the page, 2/3 across */
+      top: 210px;
+      left: 800px;
+      width: 560px;
+      padding: 20px 0 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: #0C1520;
+      border: 1px solid #253040;
+      border-radius: 12px 0 0 0;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    /* Fade off the right edge */
+    .plan-panel::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 80px;
+      background: linear-gradient(to right, transparent, #0C1520);
+      pointer-events: none;
+      z-index: 20;
+      border-radius: 0 12px 0 0;
+    }
+
+    /* Fade off the bottom edge */
+    .plan-panel::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, #0C1520);
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* ── Plan header ────────────────────────────────────────────────── */
+    .plan-header {
+      margin-bottom: 12px;
+      padding-right: 20px;
+    }
+
+    .plan-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #E8EEF5;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .plan-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .meta-badge {
+      font-size: 11px;
+      font-weight: 500;
+      color: #7B90A6;
+      background: #1C2D40;
+      border: 1px solid #253040;
+      border-radius: 4px;
+      padding: 2px 7px;
+      white-space: nowrap;
+    }
+
+    /* ── Timeline bar ───────────────────────────────────────────────── */
+    .timeline {
+      display: flex;
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      padding-right: 20px;
+      gap: 2px;
+    }
+
+    .tl-block {
+      border-radius: 2px;
+      height: 100%;
+    }
+
+    /* ── Drill cards ────────────────────────────────────────────────── */
+    .drill-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .drill-card {
+      background: #14202E;
+      border: 1px solid #253040;
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+
+    .phase-bar {
+      width: 3px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      align-self: stretch;
+    }
+
+    .drill-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .drill-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    .drill-phase {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 2px 6px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .drill-duration {
+      font-size: 11px;
+      font-weight: 500;
+      color: #7B90A6;
+      flex-shrink: 0;
+    }
+
+    .drill-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #E8EEF5;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .drill-desc {
+      font-size: 11px;
+      font-weight: 400;
+      color: #7B90A6;
+      line-height: 1.4;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    /* ── Logo mark ──────────────────────────────────────────────────── */
+    .logo-mark {
+      position: absolute;
+      bottom: 44px;
+      left: 72px;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      width: 40px;
+      height: 40px;
+      background: #14202E;
+      border: 1px solid #253040;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-badge svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .logo-wordmark {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #E8EEF5;
+    }
+
+    .logo-wordmark span { color: #FF5820; }
+
+    /* ── Footer divider ─────────────────────────────────────────────── */
+    .footer-divider {
+      position: absolute;
+      bottom: 96px;
+      left: 72px;
+      right: 72px;
+      height: 1px;
+      background: #253040;
+      z-index: 20;
+    }
+
+    .domain {
+      position: absolute;
+      bottom: 54px;
+      right: 72px;
+      z-index: 30;
+      font-size: 13px;
+      font-weight: 500;
+      color: #253040;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+
+    <!-- Left: branding & copy -->
+    <div class="content">
+      <p class="label">AI Volleyball Session Planner</p>
+      <h1 class="headline">
+        <span class="light">Volley</span><span class="accent">Planner</span>
+      </h1>
+      <p class="subheading">A complete session plan with drills, diagrams, and timings in under a minute.</p>
+      <div class="trust-items">
+        <div class="trust-item"><div class="trust-dot"></div>Court diagrams for every drill</div>
+        <div class="trust-item"><div class="trust-dot"></div>Built for UK grassroots coaches</div>
+        <div class="trust-item"><div class="trust-dot"></div>Free to start, no card required</div>
+      </div>
+    </div>
+
+    <!-- Right: session plan mockup -->
+    <div class="plan-panel">
+
+      <div class="plan-header">
+        <p class="plan-title">Intermediate Serve Receive &amp; Transition — 75 min</p>
+        <div class="plan-meta">
+          <span class="meta-badge">12 players</span>
+          <span class="meta-badge">Intermediate</span>
+          <span class="meta-badge">75 min</span>
+          <span class="meta-badge">6 drills</span>
+        </div>
+      </div>
+
+      <!-- Timeline bar -->
+      <div class="timeline">
+        <div class="tl-block" style="width: 13%; background: #F59E0B;"></div>
+        <div class="tl-block" style="width: 20%; background: #3B82F6;"></div>
+        <div class="tl-block" style="width: 20%; background: #60A5FA;"></div>
+        <div class="tl-block" style="width: 27%; background: #FF5820;"></div>
+        <div class="tl-block" style="width: 12%; background: #FF5820;"></div>
+        <div class="tl-block" style="width: 8%; background: #14B8A6;"></div>
+      </div>
+
+      <!-- Drill cards -->
+      <div class="drill-cards">
+
+        <div class="drill-card">
+          <div class="phase-bar" style="background: #F59E0B;"></div>
+          <div class="drill-body">
+            <div class="drill-top">
+              <span class="drill-phase" style="background: rgba(245,158,11,0.12); color: #F59E0B;">Warm-up</span>
+              <span class="drill-duration">10 min</span>
+            </div>
+            <p class="drill-name">Dynamic Court Warm-Up</p>
+            <p class="drill-desc">Players jog the court perimeter with dynamic movements. High knees, lateral shuffles, arm circles, and light passing to warm the shoulders.</p>
+          </div>
+        </div>
+
+        <div class="drill-card">
+          <div class="phase-bar" style="background: #3B82F6;"></div>
+          <div class="drill-body">
+            <div class="drill-top">
+              <span class="drill-phase" style="background: rgba(59,130,246,0.12); color: #3B82F6;">Technical</span>
+              <span class="drill-duration">15 min</span>
+            </div>
+            <p class="drill-name">Pepper Pairs — Platform Focus</p>
+            <p class="drill-desc">Players pair up and pepper continuously. Focus on platform angle and a firm, steady base. Rotate pairs every 3 minutes.</p>
+          </div>
+        </div>
+
+        <div class="drill-card">
+          <div class="phase-bar" style="background: #60A5FA;"></div>
+          <div class="drill-body">
+            <div class="drill-top">
+              <span class="drill-phase" style="background: rgba(96,165,250,0.12); color: #60A5FA;">Progressive</span>
+              <span class="drill-duration">15 min</span>
+            </div>
+            <p class="drill-name">3-Passer Serve Receive</p>
+            <p class="drill-desc">Three passers in a W formation receive live serves. Setter targets the OH and middle. Rotate passers every 5 serves.</p>
+          </div>
+        </div>
+
+        <div class="drill-card">
+          <div class="phase-bar" style="background: #FF5820;"></div>
+          <div class="drill-body">
+            <div class="drill-top">
+              <span class="drill-phase" style="background: rgba(255,88,32,0.12); color: #FF5820;">Game-based</span>
+              <span class="drill-duration">20 min</span>
+            </div>
+            <p class="drill-name">Serve Receive Wash Game</p>
+            <p class="drill-desc">Competitive scrimmage focusing on sideout efficiency. Server wins the point with an ace or error; receiving team wins with a kill.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-divider"></div>
+
+    <div class="logo-mark">
+      <div class="logo-badge">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="5,7 11,7 16,22 21,7 27,7 16,27" fill="#FF5820"/>
+        </svg>
+      </div>
+      <span class="logo-wordmark">Volley<span>Planner</span></span>
+    </div>
+
+    <p class="domain">volleyplanner.co.uk</p>
+
+  </div>
+</body>
+</html>

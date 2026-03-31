@@ -193,33 +193,10 @@ export default function TestPlanPage() {
     return window.innerWidth < 768 ? 'session' : 'full'
   })
   const [plan, setPlan] = useState<SessionPlan>(MOCK_PLAN)
-  const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null)
   const [swapIndex, setSwapIndex]     = useState<number | null>(null)
   const [swapOptions, setSwapOptions] = useState<Drill[] | null>(null)
   const [swapLoading, setSwapLoading] = useState(false)
   const [swapError, setSwapError]     = useState<string | null>(null)
-
-  const handleRegenerate = useCallback(async (index: number) => {
-    setRegeneratingIndex(index)
-    try {
-      const res = await fetch('/api/drill/regenerate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ drill_index: index, plan }),
-      })
-      const json = await res.json()
-      if (!res.ok) return
-      setPlan(prev => {
-        const drills = [...prev.drills]
-        drills[index] = json.data
-        return { ...prev, drills }
-      })
-    } catch {
-      // Silently fail
-    } finally {
-      setRegeneratingIndex(null)
-    }
-  }, [plan])
 
   const handleSwapOpen = useCallback(async (index: number) => {
     setSwapIndex(index)
@@ -289,8 +266,6 @@ export default function TestPlanPage() {
         <PlanView
           plan={plan}
           isPro={true}
-          regeneratingIndex={regeneratingIndex}
-          onRegenerate={handleRegenerate}
           onSwap={handleSwapOpen}
         />
       ) : (
