@@ -32,6 +32,8 @@ export interface Drill {
   phase: DrillPhase
   duration: number
   players_needed: number
+  on_court_count: number
+  rotation_pattern: string
   diagram_type: DiagramType
   diagram_config: DiagramConfig
   setup: string
