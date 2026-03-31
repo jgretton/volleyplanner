@@ -85,6 +85,81 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
   const borderColour = phaseLeftBorder[drill.phase] ?? 'border-l-vp-border'
   const hasDiagram   = drill.diagram_type !== 'none'
 
+  const actionButtons = (
+    <>
+      {isPro && (
+        <>
+          <button
+            onClick={() => handleFeedback('liked')}
+            title="Liked it"
+            className={cn(
+              'w-11 h-11 rounded-md border flex items-center justify-center transition-colors duration-150',
+              feedback === 'liked'
+                ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                : 'border-vp-border text-vp-muted hover:text-green-400 hover:border-green-500/30'
+            )}
+            aria-label="Rate drill positively"
+          >
+            <ThumbsUp size={15} />
+          </button>
+          <button
+            onClick={() => handleFeedback('disliked')}
+            title="Not for us"
+            className={cn(
+              'w-11 h-11 rounded-md border flex items-center justify-center transition-colors duration-150',
+              feedback === 'disliked'
+                ? 'bg-red-500/10 border-red-500/30 text-red-400'
+                : 'border-vp-border text-vp-muted hover:text-red-400 hover:border-red-500/30'
+            )}
+            aria-label="Rate drill negatively"
+          >
+            <ThumbsDown size={15} />
+          </button>
+          {(onRegenerate || onSwap) && (
+            <div className="w-px h-4 bg-vp-border mx-0.5" />
+          )}
+        </>
+      )}
+
+      {onRegenerate ? (
+        <button
+          onClick={() => !regenerating && onRegenerate(index)}
+          disabled={regenerating}
+          title="Regenerate drill"
+          className="w-11 h-11 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
+          aria-label="Regenerate drill"
+        >
+          {regenerating
+            ? <Loader2 size={12} className="animate-spin text-orange" />
+            : <RefreshCw size={15} />
+          }
+        </button>
+      ) : !isPro && planId ? (
+        <div title="Pro feature — regenerate this drill" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
+          <RefreshCw size={15} />
+          <Lock size={7} className="absolute bottom-0.5 right-0.5 text-vp-muted/50" />
+        </div>
+      ) : null}
+
+      {onSwap ? (
+        <button
+          onClick={() => !regenerating && onSwap(index)}
+          disabled={regenerating}
+          title="Choose an alternative drill"
+          className="w-11 h-11 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
+          aria-label="Choose an alternative drill"
+        >
+          <ArrowLeftRight size={15} />
+        </button>
+      ) : !isPro && planId ? (
+        <div title="Pro feature — swap for an alternative drill" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
+          <ArrowLeftRight size={15} />
+          <Lock size={7} className="absolute bottom-0.5 right-0.5 text-vp-muted/50" />
+        </div>
+      ) : null}
+    </>
+  )
+
   return (
     <Card className={`border-l-4 ${borderColour} overflow-hidden print-drill-card`}>
 
@@ -95,79 +170,9 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
           <h3 className="font-display font-bold uppercase text-xl text-vp-text leading-tight tracking-tight">
             {drill.name}
           </h3>
-
-          {/* Header action buttons */}
-          <div className="flex items-center gap-1 shrink-0 print:hidden">
-            {isPro && (
-              <>
-                <button
-                  onClick={() => handleFeedback('liked')}
-                  title="Liked it"
-                  className={cn(
-                    'w-11 h-11 rounded-md border flex items-center justify-center transition-colors duration-150',
-                    feedback === 'liked'
-                      ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                      : 'border-vp-border text-vp-muted hover:text-green-400 hover:border-green-500/30'
-                  )}
-                  aria-label="Rate drill positively"
-                >
-                  <ThumbsUp size={15} />
-                </button>
-                <button
-                  onClick={() => handleFeedback('disliked')}
-                  title="Not for us"
-                  className={cn(
-                    'w-11 h-11 rounded-md border flex items-center justify-center transition-colors duration-150',
-                    feedback === 'disliked'
-                      ? 'bg-red-500/10 border-red-500/30 text-red-400'
-                      : 'border-vp-border text-vp-muted hover:text-red-400 hover:border-red-500/30'
-                  )}
-                  aria-label="Rate drill negatively"
-                >
-                  <ThumbsDown size={15} />
-                </button>
-                {(onRegenerate || onSwap) && (
-                  <div className="w-px h-4 bg-vp-border mx-0.5" />
-                )}
-              </>
-            )}
-
-            {onRegenerate ? (
-              <button
-                onClick={() => !regenerating && onRegenerate(index)}
-                disabled={regenerating}
-                title="Regenerate drill"
-                className="w-11 h-11 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
-                aria-label="Regenerate drill"
-              >
-                {regenerating
-                  ? <Loader2 size={12} className="animate-spin text-orange" />
-                  : <RefreshCw size={15} />
-                }
-              </button>
-            ) : !isPro && planId ? (
-              <div title="Pro feature — regenerate this drill" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
-                <RefreshCw size={15} />
-                <Lock size={7} className="absolute bottom-0.5 right-0.5 text-vp-muted/50" />
-              </div>
-            ) : null}
-
-            {onSwap ? (
-              <button
-                onClick={() => !regenerating && onSwap(index)}
-                disabled={regenerating}
-                title="Choose an alternative drill"
-                className="w-11 h-11 rounded-md border border-vp-border text-vp-muted hover:border-vp-muted hover:text-vp-text flex items-center justify-center transition-colors duration-150 disabled:opacity-50"
-                aria-label="Choose an alternative drill"
-              >
-                <ArrowLeftRight size={15} />
-              </button>
-            ) : !isPro && planId ? (
-              <div title="Pro feature — swap for an alternative drill" className="relative w-11 h-11 rounded-md border border-vp-border text-vp-muted/30 flex items-center justify-center cursor-default">
-                <ArrowLeftRight size={15} />
-                <Lock size={7} className="absolute bottom-0.5 right-0.5 text-vp-muted/50" />
-              </div>
-            ) : null}
+          {/* Buttons — desktop: beside title */}
+          <div className="hidden md:flex items-center gap-1 shrink-0 print:hidden">
+            {actionButtons}
           </div>
         </div>
 
@@ -175,6 +180,11 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
           <Badge variant="phase" phase={drill.phase}>{drill.phase}</Badge>
           <Badge>{drill.duration} min</Badge>
           {drill.players_needed > 0 && <Badge>{drill.players_needed} players</Badge>}
+        </div>
+
+        {/* Buttons — mobile: own row below badges */}
+        <div className="flex md:hidden items-center gap-1 mt-3 print:hidden">
+          {actionButtons}
         </div>
       </div>
 
@@ -228,6 +238,23 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
             <p className="text-sm text-vp-muted leading-relaxed">{drill.setup}</p>
           </div>
 
+          {/* Equipment — no diagram case */}
+          {!hasDiagram && drill.equipment.length > 0 && (
+            <div className="border-t border-vp-border pt-6">
+              <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-2">
+                Equipment
+              </p>
+              <ul className="space-y-1">
+                {drill.equipment.map((item, i) => (
+                  <li key={i} className="flex gap-2 items-start text-sm text-vp-text">
+                    <span className="shrink-0 w-1 h-1 rounded-full bg-vp-muted/50 mt-2" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Instructions — primary content */}
           <div className="border-t border-vp-border pt-6">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-vp-text mb-4">
@@ -272,23 +299,6 @@ export function DrillCard({ drill, index, isPro, planId, initialFeedback, regene
               <p className="text-sm text-vp-text leading-relaxed">{drill.progression}</p>
             </div>
           </div>
-
-          {/* Equipment — no diagram case */}
-          {!hasDiagram && drill.equipment.length > 0 && (
-            <div className="border-t border-vp-border pt-6">
-              <p className="text-xs font-medium uppercase tracking-widest text-vp-muted mb-2">
-                Equipment
-              </p>
-              <ul className="space-y-1">
-                {drill.equipment.map((item, i) => (
-                  <li key={i} className="flex gap-2 items-start text-sm text-vp-text">
-                    <span className="shrink-0 w-1 h-1 rounded-full bg-vp-muted/50 mt-2" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
 
           {/* Coach notes */}
           <div className="border-t border-vp-border pt-6">

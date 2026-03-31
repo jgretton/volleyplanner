@@ -162,6 +162,13 @@ export function SessionForm({
   }, [activePopover])
 
   function handleQuickStart(qs: typeof QUICK_STARTS[number]) {
+    if (activeQuickStart === qs.label) {
+      setDescription('')
+      setForm({ players: 10, duration: 90, level: 'intermediate' })
+      setActiveQuickStart(null)
+      textareaRef.current?.focus()
+      return
+    }
     setDescription(qs.text)
     setForm({ players: qs.players, duration: qs.duration, level: qs.level })
     setDescError(false)
