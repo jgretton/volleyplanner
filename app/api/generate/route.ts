@@ -112,6 +112,13 @@ export async function POST(request: NextRequest) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     console.error('Generate route error:', message)
 
+    if (message === 'off_topic') {
+      return NextResponse.json(
+        { error: 'off_topic', code: 'off_topic' },
+        { status: 422 }
+      )
+    }
+
     if (message === 'generation_failed') {
       return NextResponse.json(
         {

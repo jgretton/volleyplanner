@@ -8,10 +8,20 @@ import { PlanSkeleton } from '@/components/plan/PlanSkeleton'
 import { CompactView } from '@/components/plan/CompactView'
 import { ViewToggle } from '@/components/plan/ViewToggle'
 import { SwapModal } from '@/components/plan/SwapModal'
-import { AlertTriangle, ClipboardX, Loader2, Printer } from 'lucide-react'
+import { AlertTriangle, ClipboardX, MessageSquareX, Printer } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ScrollToTop } from '@/components/ui/ScrollToTop'
 import type { SessionPlan, SkillLevel, Drill } from '@/types/plan'
+
+const LOADING_MESSAGES = [
+  'Analysing your session requirements...',
+  'Planning drill progressions...',
+  'Designing warm-up and cool-down activities...',
+  'Adding coaching points and cues...',
+  'Generating court position diagrams...',
+  'Reviewing session timing and flow...',
+  'Putting the finishing touches...',
+] as const
 
 function PlanPageContent() {
   const router        = useRouter()
@@ -25,6 +35,7 @@ function PlanPageContent() {
     if (typeof window === 'undefined') return 'full'
     return window.innerWidth < 768 ? 'session' : 'full'
   })
+  const [loadingMsgIdx, setLoadingMsgIdx] = useState(0)
   const [swapIndex, setSwapIndex]   = useState<number | null>(null)
   const [swapOptions, setSwapOptions] = useState<Drill[] | null>(null)
   const [swapLoading, setSwapLoading] = useState(false)
@@ -79,6 +90,8 @@ function PlanPageContent() {
         if (!response.ok) {
           if (json.code === 'limit_reached') {
             setError('limit_reached')
+          } else if (json.code === 'off_topic') {
+            setError('off_topic')
           } else {
             setError(json.error ?? "We couldn't generate your plan right now. Please try again.")
           }
@@ -95,6 +108,14 @@ function PlanPageContent() {
 
     generatePlan()
   }, [searchParams, router])
+
+  useEffect(() => {
+    if (!isLoading) return
+    const id = setInterval(() => {
+      setLoadingMsgIdx(i => (i + 1) % LOADING_MESSAGES.length)
+    }, 2500)
+    return () => clearInterval(id)
+  }, [isLoading])
 
   const handleSwapOpen = useCallback(async (index: number) => {
     if (!plan) return
@@ -140,13 +161,49 @@ function PlanPageContent() {
   }, [])
 
   if (isLoading) {
+    const durationVal  = parseInt(searchParams.get('duration') ?? '90')
+    const playersVal   = parseInt(searchParams.get('players')  ?? '10')
+    const levelVal     = searchParams.get('level') ?? 'intermediate'
+    const levelLabel   = levelVal.charAt(0).toUpperCase() + levelVal.slice(1)
+
     return (
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <p className="flex items-center justify-center gap-2 text-sm text-vp-muted mb-8">
-          <Loader2 size={14} className="animate-spin text-orange" />
-          Building your session plan...
-        </p>
+        <div className="bg-vp-surface border border-vp-border rounded-xl p-8 text-center mb-8">
+          <h2 className="font-display font-bold uppercase text-3xl text-vp-text leading-[0.95] tracking-tight mb-2">
+            Building Your Session Plan
+          </h2>
+          <p className="text-sm text-vp-muted mb-8">
+            {durationVal} min &middot; {playersVal} players &middot; {levelLabel}
+          </p>
+          <p className="text-sm text-orange min-h-5 mb-6 transition-all duration-300">
+            {LOADING_MESSAGES[loadingMsgIdx]}
+          </p>
+          <div className="w-full bg-vp-surface-2 rounded-full h-0.5 mb-6 overflow-hidden">
+            <div className="h-full w-2/3 bg-orange/70 rounded-full animate-pulse" />
+          </div>
+          <p className="text-xs text-vp-muted/50">Usually takes 15–20 seconds</p>
+        </div>
         <PlanSkeleton />
+      </div>
+    )
+  }
+
+  if (error === 'off_topic') {
+    return (
+      <div className="max-w-lg mx-auto px-4 py-24 text-center">
+        <MessageSquareX size={48} className="text-vp-muted mx-auto mb-6" />
+        <h2 className="font-display font-bold uppercase text-3xl text-vp-text mb-3">
+          That&apos;s not a volleyball session
+        </h2>
+        <p className="text-vp-muted mb-3 leading-relaxed">
+          VolleyPlanner only generates volleyball training sessions. Describe what you&apos;d like to work on in practice.
+        </p>
+        <p className="text-sm text-vp-muted/60 mb-8 leading-relaxed">
+          For example: &ldquo;serve receive under pressure with 10 intermediates&rdquo; or &ldquo;blocking footwork and attack patterns for beginners.&rdquo;
+        </p>
+        <Button variant="outline" onClick={() => window.history.back()}>
+          Go back and update your description
+        </Button>
       </div>
     )
   }

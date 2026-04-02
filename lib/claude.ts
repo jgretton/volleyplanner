@@ -111,6 +111,11 @@ For mixed level sessions: use role differentiation and constraint modification w
 - Constraints: beginners serve underarm or from inside the service line; advanced serve full distance overarm
 - Scoring: beginners may get a second-chance ball; advanced players do not
 
+## Off-topic requests
+
+If the coach's description is clearly unrelated to volleyball or sports coaching, respond with this exact JSON and nothing else:
+{"error":"off_topic"}
+
 ## Output
 
 You always respond with valid JSON only. No markdown, no explanation, no preamble. No code fences.`
@@ -310,47 +315,48 @@ export async function generateSessionPlan(
 ): Promise<SessionPlan> {
   const prompt = buildGeneratePrompt(inputs, likedDrills)
 
-  let response: string
-
-  try {
-    const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: prompt }],
-    })
-
-    const content = message.content[0]
-    if (content.type !== 'text') throw new Error('Unexpected response type')
-    response = content.text
-  } catch (err) {
-    console.error('Claude API error:', err)
-    throw new Error('generation_failed')
+  const apiParams = {
+    model:     'claude-sonnet-4-6',
+    max_tokens: 16384,
+    system:    SYSTEM_PROMPT,
+    messages:  [{ role: 'user' as const, content: prompt }],
   }
 
-  let parsed: unknown
+  async function callClaude(label: string): Promise<string> {
+    try {
+      const message = await anthropic.messages.create(apiParams)
+      const content = message.content[0]
+      if (content.type !== 'text') throw new Error('generation_failed')
+      return content.text
+    } catch (err) {
+      console.error(`Claude API error (${label}):`, err)
+      throw new Error('generation_failed')
+    }
+  }
 
+  let response = await callClaude('attempt 1')
+
+  let parsed: unknown
   try {
     parsed = extractJson(response)
   } catch {
     console.error('JSON extraction failed on first attempt, retrying...')
+    response = await callClaude('attempt 2')
     try {
-      const retryMessage = await anthropic.messages.create({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 4096,
-        system: SYSTEM_PROMPT,
-        messages: [
-          { role: 'user', content: prompt },
-          { role: 'assistant', content: response },
-          { role: 'user', content: 'Your response was not valid JSON. Respond with only the raw JSON object — no markdown, no code fences, no explanation.' },
-        ],
-      })
-      const retryContent = retryMessage.content[0]
-      if (retryContent.type !== 'text') throw new Error('generation_failed')
-      parsed = extractJson(retryContent.text)
+      parsed = extractJson(response)
     } catch {
+      console.error('JSON extraction failed on retry')
       throw new Error('generation_failed')
     }
+  }
+
+  if (
+    parsed !== null &&
+    typeof parsed === 'object' &&
+    'error' in parsed &&
+    (parsed as Record<string, unknown>).error === 'off_topic'
+  ) {
+    throw new Error('off_topic')
   }
 
   const result = SessionPlanSchema.safeParse(parsed)
